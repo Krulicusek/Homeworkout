@@ -1,0 +1,21 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Różne pliki",
+      "ColorIndex": -1
+    },
+    "0884a91d-d5e8-445d-9f7c-4299187c4e02": {
+      "ProjectGuid": "0884a91d-d5e8-445d-9f7c-4299187c4e02",
+      "DisplayName": "homeWorkOutApi.Net6.0",
+      "ColorIndex": 0
+    },
+    "80f15f0a-8e36-480c-9493-b2f6f37d2525": {
+      "ProjectGuid": "80f15f0a-8e36-480c-9493-b2f6f37d2525",
+      "DisplayName": "HomeWorkOutApi.NetCore",
+      "ColorIndex": 1
+    }
+  },
+  "NextColorIndex": 2
+}
