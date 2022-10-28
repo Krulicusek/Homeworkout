@@ -48,7 +48,7 @@ namespace homeWorkOutApi.Net6.Data
             try
             {
                 IConfigurationSection serversSection = Configuration.GetSection("Servers");
-                string serverMode = IsTest ? "HomeWorkOutTest" : "HomeWorkOut";
+                string serverMode = IsTest ? "HomeWorkoutContext" : "HomeWorkoutContext";
                 IConfigurationSection serverDataSection = serversSection.GetSection(serverMode);
                 string host = serverDataSection.GetValue<string>("Host");
                 string db = serverDataSection.GetValue<string>("Database");

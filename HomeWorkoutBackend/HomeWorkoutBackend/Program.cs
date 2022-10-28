@@ -41,8 +41,8 @@ appSettings.GetServerSettings();
 
 if (!string.IsNullOrEmpty(appSettings?.ServerSettings?.ConnectionString))
 {
-    builder.Services.AddDbContext<homeWorkOutApiNet6_0Context>(options =>
+    builder.Services.AddDbContext<HomeWorkoutContext>(options =>
     options.UseSqlServer(appSettings.ServerSettings.ConnectionString));
 }
-builder.Services.AddDbContext<homeWorkOutApiNet6_0Context>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("homeWorkOutApiNet6_0Context")));
+builder.Services.AddDbContext<HomeWorkoutContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("HomeWorkoutContext")));

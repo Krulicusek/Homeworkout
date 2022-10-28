@@ -4,15 +4,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HomeWorkoutBackend.Controllers
 {
-    public class ExerciseModelsController : Controller
+    [ApiController]
+    [Route("[controller]")]
+    public class ExerciseModelsController : ControllerBase
     {
-        private readonly homeWorkOutApiNet6_0Context _context;
+        private readonly HomeWorkoutContext _context;
+        private readonly ILogger<ExerciseModelsController> _logger;
 
-        public ExerciseModelsController(homeWorkOutApiNet6_0Context context)
+        public ExerciseModelsController(HomeWorkoutContext context, ILogger<ExerciseModelsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
-
+        [HttpGet(Name = "GetExerciseModel")]
         public IEnumerable<ExerciseModel> Get()
         {
             return _context.ExerciseModel.ToArray();
