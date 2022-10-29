@@ -48,20 +48,20 @@ namespace homeWorkOutApi.Net6.Data
             try
             {
                 IConfigurationSection serversSection = Configuration.GetSection("Servers");
-                string serverMode = IsTest ? "HomeWorkoutContext" : "HomeWorkoutContext";
+                string serverMode = IsTest ? "HomeWorkoutTest" : "HomeWorkout";
                 IConfigurationSection serverDataSection = serversSection.GetSection(serverMode);
-                string host = serverDataSection.GetValue<string>("Host");
+                string server = serverDataSection.GetValue<string>("Server");
                 string db = serverDataSection.GetValue<string>("Database");
-                string usrnm = serverDataSection.GetValue<string>("Username");
+                string userId = serverDataSection.GetValue<string>("User Id");
                 string pwdEncrypted = serverDataSection.GetValue<string>("Password");
 
-                if (string.IsNullOrEmpty(host) || string.IsNullOrEmpty(db) || string.IsNullOrEmpty(usrnm) || string.IsNullOrEmpty(pwdEncrypted))
+                if (string.IsNullOrEmpty(server) || string.IsNullOrEmpty(db) || string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(pwdEncrypted))
                 {
                     throw new Exception("Server data invalid");
                 }
 
                 string pwd = pwdEncrypted; //decrypt
-                ServerSettings = new ServerSettings(serverMode, host, db, usrnm, pwd);
+                ServerSettings = new ServerSettings(serverMode, server, db, userId, pwd);
             }
             catch (Exception ex)
             {

@@ -10,9 +10,9 @@ namespace HomeWorkOutApi.NetCore.Data
         #region Properties
 
         public string Name { get; set; }
-        public string Host { get; set; }
+        public string Server { get; set; }
         public string Database { get; set; }
-        public string Username { get; set; }
+        public string UserId { get; set; }
         public string Password { get; set; }
         public string ConnectionString { get; private set; }
 
@@ -20,14 +20,14 @@ namespace HomeWorkOutApi.NetCore.Data
 
         #region .Ctor
 
-        public ServerSettings(string name, string host, string database, string username, string password)
+        public ServerSettings(string name, string server, string database, string userId, string password)
         {
             Name = name;
-            Host = host;
+            Server = server;
             Database = database;
-            Username = username;
+            UserId = userId;
             Password = password;
-            ConnectionString = $"Host={host};Database={database};Username={username};Password={password}";
+            ConnectionString = $"Server={server};Database={database};User Id={userId};Password={password}";
         }
 
         #endregion

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeWorkoutBackend", "HomeWorkoutBackend\HomeWorkoutBackend.csproj", "{C17D3F21-A851-46DF-B426-2586941B0DD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWorkoutBackend", "HomeWorkoutBackend\HomeWorkoutBackend.csproj", "{C17D3F21-A851-46DF-B426-2586941B0DD2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWorkoutModels", "..\HomeWorkoutModels\HomeWorkoutModels.csproj", "{02B63310-5527-4D04-AFCD-1C7A4E321110}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{C17D3F21-A851-46DF-B426-2586941B0DD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C17D3F21-A851-46DF-B426-2586941B0DD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C17D3F21-A851-46DF-B426-2586941B0DD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{02B63310-5527-4D04-AFCD-1C7A4E321110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02B63310-5527-4D04-AFCD-1C7A4E321110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02B63310-5527-4D04-AFCD-1C7A4E321110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02B63310-5527-4D04-AFCD-1C7A4E321110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

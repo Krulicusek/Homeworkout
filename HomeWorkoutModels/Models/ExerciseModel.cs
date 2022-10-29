@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace HomeWorkOutApi.NetCore.Models
+﻿namespace HomeWorkoutModels.Models
 {
     public class ExerciseModel
     {

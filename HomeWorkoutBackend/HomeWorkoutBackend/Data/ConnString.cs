@@ -9,9 +9,9 @@
             IConfigurationSection serversSection = configuration.GetSection("Servers");
             IConfigurationSection s = serversSection.GetSection(dbSection);
 
-            string host = s.GetValue<string>("Host");
+            string host = s.GetValue<string>("Server");
             string db = s.GetValue<string>("Database");
-            string usrnm = s.GetValue<string>("Username");
+            string usrnm = s.GetValue<string>("User Id");
             string pwdEncrypted = s.GetValue<string>("Password");
 
             if (string.IsNullOrWhiteSpace(host)
@@ -22,7 +22,7 @@
 
             string pwd = pwdEncrypted; // example -> AES
 
-            connString = $"Host={host};Database={db};Username={usrnm};Password={pwd}";
+            connString = $"Server={host};Database={db};UserId={usrnm};Password={pwd}";
 
             return true;
         }

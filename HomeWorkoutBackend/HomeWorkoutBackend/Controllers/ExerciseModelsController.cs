@@ -1,5 +1,5 @@
 ﻿using homeWorkOutApi.Net6._0.Data;
-using HomeWorkOutApi.NetCore.Models;
+using HomeWorkoutModels.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeWorkoutBackend.Controllers
