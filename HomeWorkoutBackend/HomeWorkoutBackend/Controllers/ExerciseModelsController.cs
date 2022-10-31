@@ -16,10 +16,34 @@ namespace HomeWorkoutBackend.Controllers
             _context = context;
             _logger = logger;
         }
-        [HttpGet(Name = "GetExerciseModel")]
-        public IEnumerable<ExerciseModel> Get()
+        [HttpGet(Name = "GetAllExerciseModels")]
+        public IEnumerable<ExerciseModel> GetAll()
         {
-            return _context.ExerciseModel.ToArray();
+            return _context.ExerciseModel.ToArray();     
+        }
+        [HttpGet("{id}",Name = "GetExerciseModel")]
+        public ExerciseModel Get(int id)
+        {
+            return _context.ExerciseModel.Find(id);           
+        }
+            
+        [HttpPost(Name = "PostExerciseModel")]
+        public void Post(ExerciseModel exerciseModel)
+        {
+            _context.ExerciseModel.Add(exerciseModel);
+            _context.SaveChanges(); 
+        }
+        [HttpDelete("{id}", Name = "DeleteExerciseModel")]
+        public void Delete(int id)
+        {
+            _context.ExerciseModel.Remove(Get(id));
+            _context.SaveChanges();
+        }
+        [HttpPut("{id}", Name = "PutExerciseModel")]
+        public void Put(int id, ExerciseModel exerciseModel)
+        {
+            _context.ExerciseModel.Update(exerciseModel);
+            _context.SaveChanges();
         }
 
     }
