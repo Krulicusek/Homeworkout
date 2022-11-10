@@ -11,6 +11,6 @@ namespace homeWorkOutApi.Net6._0.Data
         }
 
         public DbSet<ExerciseModel> ExerciseModel { get; set; }
-        public DbSet<ExerciseSequenceModel> ExerciseSequenceModel { get; set; }
+        public DbSet<HomeworkSequenceModel> HomeworkSequenceModel { get; set; }
     }
 }

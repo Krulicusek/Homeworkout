@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 
 namespace HomeWorkoutModels.Models
 {
-    public class ExerciseSequenceModel
+    public class Homework
     {
         [Key]
-        public int Id { get; set; } 
-        public int EstimatedTimeInMinutes { get; set; }
-        public ICollection<ExerciseModel> Exercises { get; set; }
-        
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public ExerciseModel Exercise { get; set;}
+        public int NumberOfTimes { get; set; }
+        public int Seconds { get; set; }
     }
 }
