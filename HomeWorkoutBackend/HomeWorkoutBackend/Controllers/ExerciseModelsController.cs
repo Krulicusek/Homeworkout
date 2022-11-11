@@ -33,6 +33,7 @@ namespace HomeWorkoutBackend.Controllers
             _context.ExerciseModel.Add(exerciseModel);
             _context.SaveChanges(); 
         }
+
         [HttpDelete("{id}", Name = "DeleteExerciseModel")]
         public void Delete(int id)
         {

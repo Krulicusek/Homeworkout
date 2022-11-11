@@ -27,7 +27,7 @@ namespace HomeWorkOutApi.NetCore.Data
             Database = database;
             UserId = userId;
             Password = password;
-            ConnectionString = $"Server={server};Database={database};User Id={userId};Password={password}";
+            ConnectionString = $"Server={server};Database={database};User Id={userId};Password={password};TrustServerCertificate=True";
         }
 
         #endregion

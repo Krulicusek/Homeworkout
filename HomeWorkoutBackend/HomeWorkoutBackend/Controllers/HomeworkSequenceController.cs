@@ -20,21 +20,22 @@ namespace HomeWorkoutBackend.Controllers
         [HttpGet(Name = "GetAllHomeworkSequenceModels")]
         public IEnumerable<HomeworkSequenceModel> GetAll()
         {
-            return _context.HomeworkSequenceModel.Include(x => x.HomeworkICollection).ThenInclude(x => x.Exercise).ToArray();
+            return _context.HomeworkSequenceModel
+                .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))          
+                .ToArray();
         }
         [HttpGet("{id}", Name = "GetHomeworkSequence")]
         public HomeworkSequenceModel Get(int id)
         {
             return _context.HomeworkSequenceModel
-                .Include(x => x.HomeworkICollection)
-                .ThenInclude(x => x.Exercise)
+                .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
                 .FirstOrDefault(x => x.Id == id);
         }
 
         [HttpPost(Name = "PostHomeworkSequence")]
         public void Post(HomeworkSequenceModel homeworkSequence)
         {
-            _context.HomeworkSequenceModel.Add(homeworkSequence );
+            _context.HomeworkSequenceModel.Add(homeworkSequence);
             _context.SaveChanges();
         }
         [HttpDelete("{id}", Name = "DeleteHomeworkSequence")]

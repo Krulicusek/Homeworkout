@@ -12,17 +12,18 @@ using homeWorkOutApi.Net6._0.Data;
 namespace HomeWorkoutBackend.Migrations
 {
     [DbContext(typeof(HomeWorkoutContext))]
-    [Migration("20221110193806_init")]
+    [Migration("20221111132235_init")]
     partial class init
     {
+        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.10")
+                .HasAnnotation("ProductVersion", "7.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("HomeWorkoutModels.Models.ExerciseModel", b =>
                 {
@@ -30,7 +31,7 @@ namespace HomeWorkoutBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -53,15 +54,15 @@ namespace HomeWorkoutBackend.Migrations
                     b.ToTable("ExerciseModel");
                 });
 
-            modelBuilder.Entity("HomeWorkoutModels.Models.Homework", b =>
+            modelBuilder.Entity("HomeWorkoutModels.Models.HomeworkModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ExerciseId")
+                    b.Property<int>("ExerciseModelId")
                         .HasColumnType("int");
 
                     b.Property<int?>("HomeworkSequenceModelId")
@@ -70,16 +71,17 @@ namespace HomeWorkoutBackend.Migrations
                     b.Property<int>("NumberOfTimes")
                         .HasColumnType("int");
 
+                    b.Property<int>("PlaceInSequence")
+                        .HasColumnType("int");
+
                     b.Property<int>("Seconds")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ExerciseId");
-
                     b.HasIndex("HomeworkSequenceModelId");
 
-                    b.ToTable("Homework");
+                    b.ToTable("HomeworkModel");
                 });
 
             modelBuilder.Entity("HomeWorkoutModels.Models.HomeworkSequenceModel", b =>
@@ -88,7 +90,7 @@ namespace HomeWorkoutBackend.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EstimatedTimeInMinutes")
                         .HasColumnType("int");
@@ -98,19 +100,11 @@ namespace HomeWorkoutBackend.Migrations
                     b.ToTable("HomeworkSequenceModel");
                 });
 
-            modelBuilder.Entity("HomeWorkoutModels.Models.Homework", b =>
+            modelBuilder.Entity("HomeWorkoutModels.Models.HomeworkModel", b =>
                 {
-                    b.HasOne("HomeWorkoutModels.Models.ExerciseModel", "Exercise")
-                        .WithMany()
-                        .HasForeignKey("ExerciseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HomeWorkoutModels.Models.HomeworkSequenceModel", null)
                         .WithMany("HomeworkICollection")
                         .HasForeignKey("HomeworkSequenceModelId");
-
-                    b.Navigation("Exercise");
                 });
 
             modelBuilder.Entity("HomeWorkoutModels.Models.HomeworkSequenceModel", b =>
