@@ -1,5 +1,7 @@
 ﻿using HomeWorkoutMAUI.Data;
 using Microsoft.AspNetCore.Components.WebView.Maui;
+using Microsoft.Extensions.DependencyInjection;
+using SharedUILibrary.Services;
 
 namespace HomeWorkoutMAUI
 {
@@ -17,11 +19,13 @@ namespace HomeWorkoutMAUI
 
             builder.Services.AddMauiBlazorWebView();
 #if DEBUG
-		builder.Services.AddBlazorWebViewDeveloperTools();
+            builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-            builder.Services.AddAntDesign();
-            builder.Services.AddSingleton<WeatherForecastService>();
 
+            builder.Services.AddAntDesign();
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
+            builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddSingleton<ExerciseService>();
             return builder.Build();
         }
     }

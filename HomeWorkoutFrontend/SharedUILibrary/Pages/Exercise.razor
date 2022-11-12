@@ -1,9 +1,22 @@
-﻿<Button></Button>
+﻿
+@inject ExerciseService ExerciseService
+
+@foreach(ExerciseModel exercise in exerciseList)
+{
+	@exercise.Id
+	<br/>
+	@exercise.Name
+	<br />
+}
+
 @code {
-    private List<ExerciseModel> exerciseList;
+
+
+
+	private List<ExerciseModel> exerciseList;
 
 	protected override async Task OnInitializedAsync()
 	{
-		
+		exerciseList = ExerciseService.GetExerciseModels();
 	}
 }
