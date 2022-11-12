@@ -1,28 +1,28 @@
-﻿using Microsoft.AspNetCore.Components.WebView.Maui;
-using HomeWorkoutMAUI.Data;
+﻿using HomeWorkoutMAUI.Data;
+using Microsoft.AspNetCore.Components.WebView.Maui;
 
-namespace HomeWorkoutMAUI;
-
-public static class MauiProgram
+namespace HomeWorkoutMAUI
 {
-	public static MauiApp CreateMauiApp()
-	{
-		var builder = MauiApp.CreateBuilder();
-		builder
-			.UseMauiApp<App>()
-			.ConfigureFonts(fonts =>
-			{
-				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-			});
+    public static class MauiProgram
+    {
+        public static MauiApp CreateMauiApp()
+        {
+            var builder = MauiApp.CreateBuilder();
+            builder
+                .UseMauiApp<App>()
+                .ConfigureFonts(fonts =>
+                {
+                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                });
 
-		builder.Services.AddMauiBlazorWebView();
-		#if DEBUG
+            builder.Services.AddMauiBlazorWebView();
+#if DEBUG
 		builder.Services.AddBlazorWebViewDeveloperTools();
-		builder.Services.AddAntDesign();
 #endif
-		
-		builder.Services.AddSingleton<WeatherForecastService>();
+            builder.Services.AddAntDesign();
+            builder.Services.AddSingleton<WeatherForecastService>();
 
-		return builder.Build();
-	}
+            return builder.Build();
+        }
+    }
 }

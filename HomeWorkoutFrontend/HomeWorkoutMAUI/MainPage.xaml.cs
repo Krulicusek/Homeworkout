@@ -1,9 +1,10 @@
-﻿namespace HomeWorkoutMAUI;
-
-public partial class MainPage : ContentPage
+﻿namespace HomeWorkoutMAUI
 {
-	public MainPage()
-	{
-		InitializeComponent();
-	}
+    public partial class MainPage : ContentPage
+    {
+        public MainPage()
+        {
+            InitializeComponent();
+        }
+    }
 }

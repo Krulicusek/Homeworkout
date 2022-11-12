@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
-        <TargetFrameworks>net6.0-maccatalyst;net7.0-ios;net7.0-android</TargetFrameworks>
-        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net7.0-windows10.0.19041.0</TargetFrameworks>
+        <TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
+        <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
         <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
         <!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
         <OutputType>Exe</OutputType>
@@ -17,7 +17,7 @@
 
         <!-- App Identifier -->
         <ApplicationId>com.companyname.homeworkoutmaui</ApplicationId>
-        <ApplicationIdGuid>4EBF0CC4-62B6-48A1-981E-966D5FC0B8BA</ApplicationIdGuid>
+        <ApplicationIdGuid>21454A82-E164-461D-9EFE-98F0F968EDF7</ApplicationIdGuid>
 
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -51,6 +51,10 @@
 
     <ItemGroup>
       <PackageReference Include="AntDesign" Version="0.12.7" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SharedUILibrary\SharedUILibrary.csproj" />
     </ItemGroup>
 
 </Project>
