@@ -1,4 +1,5 @@
 ﻿using HomeWorkoutMAUI.Data;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.WebView.Maui;
 using Microsoft.Extensions.DependencyInjection;
 using SharedUILibrary.Services;
@@ -26,6 +27,8 @@ namespace HomeWorkoutMAUI
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<ExerciseService>();
+			builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            builder.Services.AddApiAuthorization();
             return builder.Build();
         }
     }

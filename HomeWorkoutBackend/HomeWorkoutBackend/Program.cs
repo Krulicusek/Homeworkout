@@ -1,5 +1,6 @@
 using homeWorkOutApi.Net6._0.Data;
 using homeWorkOutApi.Net6.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -26,6 +27,10 @@ if (!string.IsNullOrEmpty(appSettings?.ServerSettings?.ConnectionString))
     builder.Services.AddDbContext<HomeWorkoutContext>(options =>
     options.UseSqlServer(appSettings.ServerSettings.ConnectionString));
 }
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+}).AddCookie();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,7 +41,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
