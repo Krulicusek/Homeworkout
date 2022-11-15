@@ -1,17 +1,41 @@
 ﻿@inherits LayoutComponentBase
-
+@inject NavigationManager _navigationManager
+@inject HttpClient _httpClient
 <div class="page">
-	<div class="sidebar">
-		<NavMenu />
-	</div>
+    <div class="sidebar">
+        <NavMenu />
+    </div>
 
-	<main>
-		<div class="top-row px-4">
-			<a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
-		</div>
-
-		<article class="content px-4">
-			@Body
-		</article>
-	</main>
+    <main>
+        <AuthorizeView>
+            <Authorized>
+                <div class="top-row px-4">
+                    <h4><b>Hello, @context.User.Identity.Name</b></h4> &nbsp;
+                    <Button @onclick="LogoutUser">Logout</Button>
+                </div>
+            </Authorized>
+            <NotAuthorized>
+                <div class="top-row px-4">
+                    <Button  @onclick="LoginUser">Login</Button>
+                </div>
+            </NotAuthorized>
+        </AuthorizeView>
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
 </div>
+@code {
+
+    private async Task LogoutUser()
+    {   
+        await _httpClient.GetAsync("/Authorize/Logout");
+        _navigationManager.NavigateTo("/login", true);
+    }
+
+    private void LoginUser()
+    {
+        _navigationManager.NavigateTo("/login", true);
+    }
+
+}

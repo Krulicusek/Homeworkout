@@ -31,9 +31,9 @@
             <label>Password</label><br>
             <InputText type="password" placeholder="Password" @bind-Value="@usrPwd.Pwd" />
             <br><br>
-            <button class="btn btn-primary">
+            <Button Type="@ButtonType.Primary">
                 Submit
-            </button>
+            </Button>
         </EditForm>
     </div>
 </div>
@@ -50,7 +50,7 @@
         string json = JsonSerializer.Serialize(usrPwd);
 
         StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await Http.PostAsync("api/Authorize/login", httpContent);
+        HttpResponseMessage response = await Http.PostAsync("/Authorize/login", httpContent);
         AuthenticationStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
         var auth = await AuthenticationStateTask;
         if (auth.User.Identity.IsAuthenticated)
@@ -65,7 +65,7 @@
         var user = authState.User;
         if (user.Identity.IsAuthenticated)
         {
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("/", true);
         }
 
     }

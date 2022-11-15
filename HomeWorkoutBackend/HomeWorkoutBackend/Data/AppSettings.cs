@@ -74,7 +74,7 @@ namespace homeWorkOutApi.Net6.Data
         {
             try
             {
-                if (IsTest)
+                if (!IsTest)
                 {
                     string[] users = Configuration.GetSection("TestUsersData:TestUsers").Get<string[]>();
                     string password = Configuration.GetSection("TestUsersData:Password").Get<string>();

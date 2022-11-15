@@ -1,5 +1,5 @@
 ﻿@page "/"
-
+@inject AuthenticationStateProvider AuthenticationStateProvider
 <PageTitle>Index</PageTitle>
 <AuthorizeView>
     <Authorized>
@@ -14,4 +14,8 @@
 @code {
     [CascadingParameter]
     public Task<AuthenticationState> AuthenticationState { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState = AuthenticationStateProvider.GetAuthenticationStateAsync();
+    }
 }

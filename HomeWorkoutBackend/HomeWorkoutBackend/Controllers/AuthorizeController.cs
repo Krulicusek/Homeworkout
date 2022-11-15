@@ -86,7 +86,7 @@ namespace HomeWorkoutBackend.Controllers
                         Role = role,
                     };
                     var claim = new Claim(ClaimTypes.Name, usrPwd.Username);
-                    var claimsIdentity = new ClaimsIdentity(new[] { claim });
+                    var claimsIdentity = new ClaimsIdentity(new[] { claim }, CookieAuthenticationDefaults.AuthenticationScheme);
                     var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
                     await HttpContext.SignInAsync(claimsPrincipal);
                     return await Task.FromResult(user);

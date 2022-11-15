@@ -1,14 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Components.Authorization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Json;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
-	namespace HomeWorkoutMAUI.Data
+namespace HomeWorkoutMAUI.Data
 {
 	public class CustomAuthenticationStateProvider : AuthenticationStateProvider
 	{
@@ -18,7 +13,7 @@ using System.Threading.Tasks;
 		{
 			_httpClient = httpClient;
 		}
-
+		//resetuje mi sie to
 		public async override Task<AuthenticationState> GetAuthenticationStateAsync()
 		{
 			User currentUser = await _httpClient.GetFromJsonAsync<User>("/Authorize/GetCurrentUser");
