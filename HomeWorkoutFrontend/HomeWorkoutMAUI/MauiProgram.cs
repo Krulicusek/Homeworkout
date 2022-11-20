@@ -27,7 +27,6 @@ namespace HomeWorkoutMAUI
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
             builder.Services.AddSingleton<WeatherForecastService>();
             builder.Services.AddSingleton<ExerciseService>();
-			builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             builder.Services.AddApiAuthorization();
             return builder.Build();
         }
