@@ -1,8 +1,12 @@
 using homeWorkOutApi.Net6._0.Data;
 using homeWorkOutApi.Net6.Data;
+using HomeWorkoutBackend;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 IConfiguration configuration = new ConfigurationBuilder()
@@ -14,23 +18,36 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+builder.Services.AddDbContext<HomeWorkoutContext>();
+builder.Services.AddScoped<Seeder>();
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+// Authentication
+var authenticationSettings = new AuthenticationSettings();
+builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+builder.Services.AddSingleton(authenticationSettings);
+builder.Services.AddAuthentication(option =>
 {
-    config.AddJsonFile("appsettings.json");
+    option.DefaultAuthenticateScheme = "Bearer";
+    option.DefaultScheme = "Bearer";
+    option.DefaultChallengeScheme = "Bearer";
+}).AddJwtBearer(cfg =>
+{
+    cfg.RequireHttpsMetadata = false;
+    cfg.SaveToken = true;
+    cfg.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidIssuer = authenticationSettings.JwtIssuer,
+        ValidAudience = authenticationSettings.JwtIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey)),
+    };
 });
+
 
 AppSettings appSettings = new AppSettings(configuration);
 appSettings.GetServerSettings();
-
-if (!string.IsNullOrEmpty(appSettings?.ServerSettings?.ConnectionString))
-{
-    builder.Services.AddDbContext<HomeWorkoutContext>(options =>
-    options.UseSqlServer(appSettings.ServerSettings.ConnectionString));
-}
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-}).AddCookie();
+Seeder seeder = new Seeder(new HomeWorkoutContext());
+seeder.Seed();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,8 +57,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 app.UseAuthentication();
+app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();

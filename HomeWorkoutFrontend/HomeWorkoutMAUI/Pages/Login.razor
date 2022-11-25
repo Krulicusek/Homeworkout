@@ -14,29 +14,30 @@
 @page "/login"
 @layout NoMenuLayout
 <PageTitle>Login</PageTitle>
-
-
-
-<div class="container">
-    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center"
-        <EditForm Model=@usrPwd OnValidSubmit=@ValidFormSubmitted
-                  OnInvalidSubmit=@InvalidFormSubmitted>
-            <DataAnnotationsValidator />
-            <ValidationSummary />
-            <h1>Login</h1>
-            <br>
-            <label>Username</label><br>
-            <InputText type="text" placeholder="Username" @bind-Value="@usrPwd.Username" />
-            <br><br>
-            <label>Password</label><br>
-            <InputText type="password" placeholder="Password" @bind-Value="@usrPwd.Pwd" />
-            <br><br>
-            <Button Type="@ButtonType.Primary">
+@*<div class="container">
+    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center"*@
+         <Form Model="@usrPwd"
+      OnFinish="ValidFormSubmitted"
+      OnFinishFailed="InvalidFormSubmitted"
+          LabelColSpan="8"
+          WrapperColSpan="16">
+        <FormItem>
+        <Input @bind-Value="@usrPwd.Username" />
+        </FormItem>
+        <FormItem Label="Password">
+        <InputPassword @bind-Value="@usrPwd.Pwd" />
+        </FormItem>
+        <FormItem WrapperColOffset="8" WrapperColSpan="16">
+            <Checkbox @bind-Value="@RememberMe">Remember me</Checkbox>
+        </FormItem>
+        <FormItem WrapperColOffset="8" WrapperColSpan="16">
+            <Button Type="@ButtonType.Primary" HtmlType="submit">
                 Submit
             </Button>
-        </EditForm>
-    </div>
-</div>
+        </FormItem>
+    </Form>
+@*    </div>
+</div>*@
 
 @code
 {
@@ -44,7 +45,7 @@
     public Task<AuthenticationState> AuthenticationStateTask { get; set; } // = null!;
 
     private UsrPwd usrPwd = new();
-
+    private bool RememberMe { get; set; } = true;
     private async void ValidFormSubmitted(EditContext editContext)
     {   
         string json = JsonSerializer.Serialize(usrPwd);
@@ -55,7 +56,7 @@
         var auth = await AuthenticationStateTask;
         if (auth.User.Identity.IsAuthenticated)
         {
-            Navigation.NavigateTo("/", true);
+            Navigation.NavigateTo("/", false);
         }
     }
 

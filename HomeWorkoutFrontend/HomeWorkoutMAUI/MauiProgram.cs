@@ -19,9 +19,10 @@ namespace HomeWorkoutMAUI
                 });
 
             builder.Services.AddMauiBlazorWebView();
-#if DEBUG
+#if DEBUG 
             builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
+
             builder.Services.AddOptions();
             builder.Services.AddAntDesign();
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });

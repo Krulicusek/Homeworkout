@@ -47,7 +47,7 @@ namespace HomeWorkoutBackend.Controllers
             }
 
             bool? isTest = appSettings.IsTest;
-
+            
             if (!isTest.HasValue)
             {
                 return null;
