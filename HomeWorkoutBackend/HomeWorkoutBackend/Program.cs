@@ -21,7 +21,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HomeWorkoutContext>();
 builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
+//builder.WebHost.UseUrls("https://*:7057");
 // Authentication
 var authenticationSettings = new AuthenticationSettings();
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);

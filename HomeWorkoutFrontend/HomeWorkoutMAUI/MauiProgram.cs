@@ -1,7 +1,4 @@
-﻿using HomeWorkoutMAUI.Data;
-using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Components.WebView.Maui;
-using Microsoft.Extensions.DependencyInjection;
+﻿using SharedUILibrary.Interfaces;
 using SharedUILibrary.Services;
 
 namespace HomeWorkoutMAUI
@@ -23,13 +20,14 @@ namespace HomeWorkoutMAUI
             builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
 
-            builder.Services.AddOptions();
             builder.Services.AddAntDesign();
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
+
+            /// when connecting from other machine than localhost u have to swap out "localhost" for an IPv4 adress
+            ///             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
+            ///         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.0.120:3000") });  <- to działa z iisproxy oraz proxy na emulatorze 
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });            
             builder.Services.AddSingleton<ExerciseService>();
-            builder.Services.AddApiAuthorization();
-            builder.Services.AddAuthorizationCore();
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            builder.Services.AddSingleton<IAppService, AppService>();
             return builder.Build();
         }
     }

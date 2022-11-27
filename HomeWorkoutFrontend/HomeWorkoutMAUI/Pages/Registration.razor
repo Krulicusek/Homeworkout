@@ -1,0 +1,100 @@
+﻿@page "/registration"
+@using HomeWorkoutModels.Models;
+@using SharedUILibrary.Services;
+@using SharedUILibrary.Interfaces;
+@inject IAppService AppService;
+@inject NavigationManager NavManager;
+
+<h3>Registration</h3>
+
+<EditForm Model="@registrationModel" OnValidSubmit="Submit">
+    <DataAnnotationsValidator/>
+    <div class="form-group">
+            <label>First name</label>
+            <input @bind-value="registrationModel.FirstName" class="form-control" placeholder="Enter first name">
+        <ValidationMessage For="@(()=> registrationModel.FirstName)" />
+    </div>
+    <div class="form-group">
+            <label>Last name</label>
+            <input @bind-value="registrationModel.LastName" class="form-control" placeholder="Last name">
+        <ValidationMessage For="@(()=> registrationModel.LastName)" />
+    </div>
+    <div class="mt-2 form-group">
+            <label>Gender</label>
+            <div class="d-flex flex-row">
+                <div class="d-flex gap-2">
+                    <div class="form-check">
+                        <input @onchange="@(()=> registrationModel.Gender="male")" class="form-check-input" type="radio" name="flexRadioDefault">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            Male
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input @onchange="@(()=> registrationModel.Gender="female")" class="form-check-input" type="radio" name="flexRadioDefault">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Female
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <ValidationMessage For="@(()=> registrationModel.Gender)" />
+    </div>
+
+    <div class="form-group">
+            <label>Email</label>
+            <input type="email" @bind-value="registrationModel.Email" class="form-control" placeholder="Enter email">
+        <ValidationMessage For="@(()=> registrationModel.Email)" />
+    </div>
+
+    <div class="form-group">
+            <label>Password</label>
+            <input type="password" @bind-value="registrationModel.Password" class="form-control" placeholder="Enter password">
+        <ValidationMessage For="@(()=> registrationModel.Password)" />
+    </div>
+
+    <div class="form-group">
+            <label>Confirm password</label>
+            <input type="password" @bind-value="registrationModel.ConfirmedPassword" class="form-control" placeholder="Enter confirmed password">
+        <ValidationMessage For="@(()=> registrationModel.ConfirmedPassword)" />
+    </div>
+
+    <div class="mt-2 text-end">
+        <NavLink class="nav-link" href="login">
+            <span>Click here to login!</span>
+        </NavLink>
+    </div>
+
+    <div ckass="text-center mt-2">
+       <Button Type="@ButtonType.Primary" HtmlType="submit">
+            <span class="@_spinnderClass" role="status" aroa-hidden="true"></span>
+            Register
+        </Button>
+    </div>
+
+</EditForm>
+
+
+@code {
+    RegistrationModel registrationModel = new();
+
+    private string _spinnderClass = "";
+
+    private async void Submit()
+    {
+        _spinnderClass = "spinner-border spinner-border-sm";
+        var response = await AppService.RegistgerUser(registrationModel);
+        if (response.isSuccess)
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", "Registration successful", "OK");
+            NavManager.NavigateTo("/login");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", response.errorMessage, "OK");
+        }
+        _spinnderClass = "";
+        this.StateHasChanged();
+
+    }
+
+}

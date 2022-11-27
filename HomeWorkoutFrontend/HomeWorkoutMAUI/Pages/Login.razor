@@ -1,77 +1,82 @@
-﻿@using System.ComponentModel.DataAnnotations;
-@using System.Text.Json;
-@using System.ComponentModel
-@using HomeWorkoutModels
-@using System.Net.Http;
-@using System.Security.Claims
-@using System.Web
+﻿@page "/login"
+@using Newtonsoft.Json;
+@using HomeWorkoutModels.Models;
+@using SharedUILibrary.Services;
+@using System.IdentityModel.Tokens.Jwt;
+@using System.Security.Claims;
+@using SharedUILibrary.Interfaces;
+@inject IAppService AppService;
+@inject NavigationManager NavManager;
+<h3>Login</h3>
 
-@attribute [AllowAnonymous]
-@inject HttpClient Http
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager Navigation
+<EditForm Model="@loginModel" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Email address</label>
+        <input type="email" @bind-value="loginModel.Email" class="form-control" placeholder="Enter email">
+        <ValidationMessage For="@(()=> loginModel.Email)" />
+    </div>
 
-@page "/login"
-@layout NoMenuLayout
-<PageTitle>Login</PageTitle>
-@*<div class="container">
-    <div class="d-flex flex-column min-vh-100 justify-content-center align-items-center"*@
-         <Form Model="@usrPwd"
-      OnFinish="ValidFormSubmitted"
-      OnFinishFailed="InvalidFormSubmitted"
-          LabelColSpan="8"
-          WrapperColSpan="16">
-        <FormItem>
-        <Input @bind-Value="@usrPwd.Username" />
-        </FormItem>
-        <FormItem Label="Password">
-        <InputPassword @bind-Value="@usrPwd.Pwd" />
-        </FormItem>
-        <FormItem WrapperColOffset="8" WrapperColSpan="16">
-            <Checkbox @bind-Value="@RememberMe">Remember me</Checkbox>
-        </FormItem>
-        <FormItem WrapperColOffset="8" WrapperColSpan="16">
-            <Button Type="@ButtonType.Primary" HtmlType="submit">
-                Submit
-            </Button>
-        </FormItem>
-    </Form>
-@*    </div>
-</div>*@
+    <div class="mt-2 form-group">
+        <label>Password</label>
+        <input type="password" @bind-value="loginModel.Password" class="form-control" placeholder="Password">
+        <ValidationMessage For="@(()=> loginModel.Password)" />
+    </div>
 
-@code
-{
-    [CascadingParameter]
-    public Task<AuthenticationState> AuthenticationStateTask { get; set; } // = null!;
+    <div class="mt-2 text-end">
+        <NavLink class="nav-link" href="registration">
+            <span>Click here to create new account!</span>
+        </NavLink>
+    </div>
 
-    private UsrPwd usrPwd = new();
-    private bool RememberMe { get; set; } = true;
-    private async void ValidFormSubmitted(EditContext editContext)
-    {   
-        string json = JsonSerializer.Serialize(usrPwd);
+    <div ckass="text-center mt-2">
+        <Button Type="@ButtonType.Primary" HtmlType="submit">
+            <span class="@_spinnderClass" role="status" aroa-hidden="true"></span>
+            SignIn
+        </Button>
+    </div>
+</EditForm>
 
-        StringContent httpContent = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
-        HttpResponseMessage response = await Http.PostAsync("/Authorize/login", httpContent);
-        AuthenticationStateTask = AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var auth = await AuthenticationStateTask;
-        if (auth.User.Identity.IsAuthenticated)
-        {
-            Navigation.NavigateTo("/", false);
-        }
-    }
+@code {
+    LoginModel loginModel = new();
 
-    protected override async Task OnParametersSetAsync()
+    private string _spinnderClass = "";
+
+    private async void Submit()
     {
-        var authState = await AuthenticationStateTask;
-        var user = authState.User;
-        if (user.Identity.IsAuthenticated)
+        _spinnderClass = "spinner-border spinner-border-sm";
+        var response = await AppService.AuthenticateUser(loginModel);
+        if (!string.IsNullOrWhiteSpace(response))
         {
-            Navigation.NavigateTo("/", true);
-        }
+            var handler = new JwtSecurityTokenHandler();
+            var jsontoken = handler.ReadJwtToken(response) as JwtSecurityToken;
+            string userId = jsontoken.Claims.FirstOrDefault(a => a.Type == ClaimTypes.NameIdentifier).Value;
+            string userName = jsontoken.Claims.FirstOrDefault(a => a.Type == ClaimTypes.Name).Value;
+            string userEmail = jsontoken.Claims.FirstOrDefault(a => a.Type == ClaimTypes.Email).Value;
+            string userSurname = jsontoken.Claims.FirstOrDefault(a => a.Type == ClaimTypes.Surname).Value;
+            string userRole = jsontoken.Claims.FirstOrDefault(a => a.Type == ClaimTypes.Role).Value;
 
-    }
-    private void InvalidFormSubmitted(EditContext editContext)
-    {
-        Console.WriteLine($"Failed:{JsonSerializer.Serialize(usrPwd)}");
+            var userBasicDetail = new UserBasicDetail()
+            {
+                Id = userId,
+                Name = userName,
+                Surname = userSurname,
+                Email = userEmail,
+                Role = userRole,
+                Token = response,
+            };
+
+            string userBasicInfoStr = JsonConvert.SerializeObject(userBasicDetail);
+            await SecureStorage.SetAsync(nameof(Setting.UserBasicDetail), userBasicInfoStr);
+            Setting.UserBasicDetail = userBasicDetail;
+            NavManager.NavigateTo("/index");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", "Invalid email or password!", "OK");
+        }
+        _spinnderClass = "";
+        this.StateHasChanged();
+
     }
 }

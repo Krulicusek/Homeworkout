@@ -1,21 +1,10 @@
-﻿@page "/"
-@inject AuthenticationStateProvider AuthenticationStateProvider
-<PageTitle>Index</PageTitle>
-<AuthorizeView>
-    <Authorized>
-        <h1>Hello, @context.User.Identity.Name!</h1>
-        <p>You can only see this content if you're authorized.</p>
-    </Authorized>
-    <NotAuthorized>
-        <h1>Authentication Failure!</h1>
-        <p>You're not signed in.</p>
-    </NotAuthorized>
-</AuthorizeView>
-@code {
-    [CascadingParameter]
-    public Task<AuthenticationState> AuthenticationState { get; set; }
-    protected override async Task OnInitializedAsync()
-    {
-        AuthenticationState = AuthenticationStateProvider.GetAuthenticationStateAsync();
-    }
-}
+﻿@page "/index"
+@using HomeWorkoutModels.Models;
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+<br />
+
+
+Welcome @Setting.UserBasicDetail.Name !

@@ -29,7 +29,9 @@ namespace HomeWorkoutBackend.Controllers
         {
             var email = _context.Users.FirstOrDefault(a => a.Email== dto.Email);
             if (email != null)
-                throw new Exception("Address email already taken!");
+            {
+                return BadRequest("Address email already taken!");
+            }
 
             User newUser = new User()
             {
@@ -55,13 +57,15 @@ namespace HomeWorkoutBackend.Controllers
                 .Include(r => r.Role)
                 .FirstOrDefault(e => e.Email == dto.Email);
             if (user is null)
-                throw new Exception("Invalid email or password!");
-
+            {
+                BadRequest("Invalid email or password!");
+            }
             var result = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
 
             if (result == PasswordVerificationResult.Failed)
-                throw new Exception("Invalid email or password!");
-
+            {
+                BadRequest("Invalid email or password!");
+            }
             var claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
