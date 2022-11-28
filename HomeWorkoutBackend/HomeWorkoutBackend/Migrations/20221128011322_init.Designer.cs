@@ -12,8 +12,8 @@ using homeWorkOutApi.Net6._0.Data;
 namespace HomeWorkoutBackend.Migrations
 {
     [DbContext(typeof(HomeWorkoutContext))]
-    [Migration("20221116194417_addUsersAndRoles")]
-    partial class addUsersAndRoles
+    [Migration("20221128011322_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,6 +89,9 @@ namespace HomeWorkoutBackend.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EstimatedTimeInMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");

@@ -7,7 +7,8 @@ namespace HomeWorkoutModels.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; } 
+        public int Id { get; set; }
+        public int UserId { get; set; }
         public int EstimatedTimeInMinutes { get; set; }
         public ICollection<HomeworkModel> HomeworkICollection { get; set; }
         

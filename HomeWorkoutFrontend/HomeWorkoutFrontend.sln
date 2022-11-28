@@ -6,7 +6,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWorkoutModels", "..\Hom
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedUILibrary", "SharedUILibrary\SharedUILibrary.csproj", "{A5684BCA-33F4-4B8E-AAEA-1C77070F05CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeWorkoutMAUI", "HomeWorkoutMAUI\HomeWorkoutMAUI.csproj", "{748BA78C-675F-4A59-AA1D-B8D7F4DE9983}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeWorkoutMAUI", "HomeWorkoutMAUI\HomeWorkoutMAUI.csproj", "{748BA78C-675F-4A59-AA1D-B8D7F4DE9983}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

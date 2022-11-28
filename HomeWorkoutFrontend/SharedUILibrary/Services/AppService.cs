@@ -6,27 +6,29 @@ using System.Linq;
 using System.Threading.Tasks;
 using SharedUILibrary.Interfaces;
 using HomeWorkoutModels.Models;
+using System.Net.Http.Json;
 
 namespace SharedUILibrary.Services
 {
     public class AppService : IAppService
     {
-        private string _baseUrl = "https://localhost:7057";
+
+        private readonly HttpClient httpClient;
+        public AppService(HttpClient httpClient)
+        {
+            this.httpClient = httpClient;
+        }
         public async Task<string> AuthenticateUser(LoginModel loginModel)
         {
             string returnStr = string.Empty;
-            using (var client = new HttpClient())
-            {
-                var url = $"{_baseUrl}{APIs.AuthenticateUser}";
-
-                var serializedStr = JsonConvert.SerializeObject(loginModel);
-                var response = await client.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
-
+         
+            var serializedStr = JsonConvert.SerializeObject(loginModel);
+            var response = await httpClient.PostAsync(APIs.AuthenticateUser, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
                 if (response.IsSuccessStatusCode)
                 {
                     returnStr = await response.Content.ReadAsStringAsync();
-                }
-            }
+                }  
+
             return returnStr;
         }
 
@@ -34,12 +36,8 @@ namespace SharedUILibrary.Services
         {
             string errorMessage = string.Empty;
             bool isSuccess = false;
-            using (var client = new HttpClient())
-            {
-                var url = $"{_baseUrl}{APIs.RegistrationUser}";
-
-                var serializedStr = JsonConvert.SerializeObject(registrationModel);
-                var response = await client.PostAsync(url, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
+            var serializedStr = JsonConvert.SerializeObject(registrationModel);
+            var response = await httpClient.PostAsync(APIs.RegistrationUser, new StringContent(serializedStr, Encoding.UTF8, "application/json"));
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -49,7 +47,7 @@ namespace SharedUILibrary.Services
                 {
                     errorMessage= await response.Content.ReadAsStringAsync();            
                 }
-            }
+
             return (isSuccess, errorMessage);
         }
     }

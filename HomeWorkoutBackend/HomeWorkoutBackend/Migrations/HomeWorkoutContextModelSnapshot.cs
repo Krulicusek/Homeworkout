@@ -88,6 +88,9 @@ namespace HomeWorkoutBackend.Migrations
                     b.Property<int>("EstimatedTimeInMinutes")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.ToTable("HomeworkSequenceModel");

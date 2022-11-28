@@ -27,6 +27,7 @@ namespace HomeWorkoutMAUI
             ///         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.0.120:3000") });  <- to działa z iisproxy oraz proxy na emulatorze 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });            
             builder.Services.AddSingleton<ExerciseService>();
+            builder.Services.AddSingleton<HomeworkSequenceService>();
             builder.Services.AddSingleton<IAppService, AppService>();
             return builder.Build();
         }
