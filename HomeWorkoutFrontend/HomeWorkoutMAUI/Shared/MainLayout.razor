@@ -14,5 +14,11 @@
         <article class="content px-4">
             @Body
         </article>
+        <Space Size="@($"{bottomPadding}")" Direction="DirectionVHType.Vertical">
+            <SpaceItem />
+        </Space>
     </main>
 </div>
+@code{
+ private double bottomPadding = 60;
+}

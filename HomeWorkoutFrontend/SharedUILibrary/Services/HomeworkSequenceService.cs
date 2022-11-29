@@ -15,10 +15,10 @@ namespace SharedUILibrary.Services
         {
             this.httpClient = httpClient;
         }
-        public HomeworkSequenceModel GetHomeworkSequence(int id)
+        public HomeworkSequenceModel GetHomeworkSequence(string id)
         {
             HomeworkSequenceModel homeworkSequenceModel = new HomeworkSequenceModel();
-            homeworkSequenceModel = httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/ExerciseModels/{id}").Result;
+            homeworkSequenceModel = httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/HomeworkSequence/{id}").Result;
             return homeworkSequenceModel;
         }
     }
