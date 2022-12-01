@@ -26,7 +26,7 @@
                                         <Image Src="@exercise.ImageSource" Width="250px" />
                                     </SpaceItem>
                                     <SpaceItem>
-                                        <Descriptions Bordered Column="@column">
+                                        <Descriptions>
                                             <DescriptionsItem Title="Seconds">@homeworkSequenceModel.HomeworkICollection.Single(x=>x.ExerciseModelId == exercise.Id).Seconds</DescriptionsItem>
                                             <DescriptionsItem Title="NumberOfTimes">@homeworkSequenceModel.HomeworkICollection.Single(x=>x.ExerciseModelId == exercise.Id).NumberOfTimes</DescriptionsItem>
                                         </Descriptions>
@@ -49,14 +49,7 @@
     private string size = "large";
     private HomeworkSequenceModel homeworkSequenceModel;
     private List<ExerciseModel> exerciseList = new List<ExerciseModel>();
-    private Dictionary<string, int> column = new Dictionary<string, int> {
-            { "xxl", 3 },
-            { "xl", 3},
-            { "lg", 2},
-            { "md", 2},
-            { "sm", 1},
-            { "xs", 1}
-        };
+
 
 
     protected override async Task OnInitializedAsync()
