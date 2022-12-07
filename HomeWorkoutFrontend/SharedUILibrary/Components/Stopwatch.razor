@@ -1,0 +1,84 @@
+﻿<GridRow Type="flex" Justify="center">
+
+    <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
+        <SpaceItem>
+            <Progress Percent=percent Type=ProgressType.Circle Status="ProgressStatus.Exception" Format=stopwatchFormat></Progress>
+        </SpaceItem>
+        <SpaceItem>
+            <Title Level=2 Style="position:relative;bottom:90px" Type="danger">@_counter</Title>
+        </SpaceItem>
+        <Space>
+            <SpaceItem>
+                <Button Danger Type="@ButtonType.Primary" OnClick=StartStopwatch>Restart</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <Button Danger OnClick=StopStopwatch>Stop</Button>
+            </SpaceItem>
+            <SpaceItem>
+                <Button OnClick=ResumeStopwatch>Resume</Button>
+            </SpaceItem>
+        </Space>
+    </Space>
+
+</GridRow>
+
+@code {
+    [ParameterAttribute]
+    public int Counter { get; set; }
+    [ParameterAttribute]
+    public bool IsStarted { get; set; }
+    private int _counter;
+    private string size = "small";
+    private double percent = 100;
+    private static System.Timers.Timer timer;
+    private Func<double, string> stopwatchFormat = (p) => $"";
+
+    protected override async Task OnInitializedAsync()
+    {
+        StartStopwatch();
+    }
+
+    private void StartStopwatch()
+    {
+        if (timer != null)
+        {
+            timer.Dispose();
+        }
+        _counter = Counter;
+        percent = (double)_counter / Counter * 100;
+        timer = new System.Timers.Timer(1000);
+        timer.Elapsed += CountDownTimer;
+        timer.Enabled = true;
+        IsStarted = true;
+    }
+
+    public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    {
+        if (!IsStarted)
+        {
+            _counter = Counter;
+            percent = (double)_counter / Counter * 100;
+            return;
+        }
+        if (_counter > 0)
+        {
+            _counter -= 1;
+            percent = (double)_counter / Counter * 100;
+        }
+        else
+        {
+            timer.Enabled = false;
+            IsStarted = false;
+        }
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void ResumeStopwatch()
+    {
+        timer.Start();
+    }
+    private void StopStopwatch()
+    {
+        timer.Stop();
+    }
+}
