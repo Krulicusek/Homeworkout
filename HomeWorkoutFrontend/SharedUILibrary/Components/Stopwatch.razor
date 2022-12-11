@@ -1,38 +1,97 @@
-﻿<GridRow Type="flex" Justify="center">
-
+﻿
+<GridRow Type="" Justify="center">
     <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
         <SpaceItem>
-            <Progress Percent=percent Type=ProgressType.Circle Status="ProgressStatus.Exception" Format=stopwatchFormat></Progress>
+            <Image Src="@ExerciseModel.ImageSource" Width="300px" Height="200px" />
         </SpaceItem>
         <SpaceItem>
-            <Title Level=2 Style="position:relative;bottom:90px" Type="danger">@_counter</Title>
+            <Text Strong>
+                @seriesProgress()
+            </Text>
         </SpaceItem>
-        <Space>
-            <SpaceItem>
-                <Button Danger Type="@ButtonType.Primary" OnClick=StartStopwatch>Restart</Button>
-            </SpaceItem>
-            <SpaceItem>
-                <Button Danger OnClick=StopStopwatch>Stop</Button>
-            </SpaceItem>
-            <SpaceItem>
-                <Button OnClick=ResumeStopwatch>Resume</Button>
-            </SpaceItem>
-        </Space>
-    </Space>
+        <SpaceItem>
+            <div class=@blink>
+                <Progress Percent=percent Type=ProgressType.Circle Status="ProgressStatus.Exception" Format=stopwatchFormat></Progress>
+            </div>
+        </SpaceItem>
+        <div class=@blink>
+            <Title Level=2 Style="position:relative;bottom:105px" Type="danger">@_counter</Title>
+        </div>
+        <SpaceItem>
+            <div class=@blink>
+                <Text Strong Style="display:inline-block">
+                    @info()
+                </Text>
+            </div>
+        </SpaceItem>
+        <SpaceItem>
+            <Space>
+                <SpaceItem>
+                    <Button Danger Type="@ButtonType.Primary" OnClick=StartStopwatch>Restart</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button Danger OnClick=StopStopwatch>Stop</Button>
+                </SpaceItem>
+                <SpaceItem>
+                    <Button OnClick=ResumeStopwatch>Resume</Button>
+                </SpaceItem>
+            </Space>
+        </SpaceItem>
 
+    </Space>
 </GridRow>
+
+
 
 @code {
     [ParameterAttribute]
     public int Counter { get; set; }
     [ParameterAttribute]
     public bool IsStarted { get; set; }
+    [ParameterAttribute]
+    public int NumberOfTimes { get; set; }
+    [ParameterAttribute]
+    public ExerciseModel ExerciseModel { get; set; }
+    [Parameter]
+    public EventCallback ExerciseFinished { get; set; }
     private int _counter;
-    private string size = "small";
+    private string size = "large";
     private double percent = 100;
     private static System.Timers.Timer timer;
     private Func<double, string> stopwatchFormat = (p) => $"";
+    private string blink = "";
+    private int currentNumber = 1;
 
+    private string seriesProgress()
+    {
+        if (currentNumber == NumberOfTimes)
+        {
+            if (_counter == 0)
+            {
+                return $"series completed! {currentNumber}/{NumberOfTimes}";
+            }
+        }
+        return $"series {currentNumber}/{NumberOfTimes}";
+
+    }
+    private string info()
+    {
+        if (_counter == 0)
+        {
+            if (currentNumber != NumberOfTimes)
+            {
+                return "Press resume to start next series.";
+            }
+            else
+            {
+                return "Press resume to start next exercise in sequence.";
+            }
+        }
+        else
+        {
+            return "";
+        }
+    }
     protected override async Task OnInitializedAsync()
     {
         StartStopwatch();
@@ -50,35 +109,58 @@
         timer.Elapsed += CountDownTimer;
         timer.Enabled = true;
         IsStarted = true;
+        blink = "";
     }
 
-    public void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
+    public async void CountDownTimer(Object source, System.Timers.ElapsedEventArgs e)
     {
+        // If the timer has been closed without pausing then it will start from begining again
         if (!IsStarted)
         {
             _counter = Counter;
             percent = (double)_counter / Counter * 100;
             return;
         }
+        // as long as counter is > 0 timer will count down
         if (_counter > 0)
         {
             _counter -= 1;
             percent = (double)_counter / Counter * 100;
         }
+        // if counter is 0
         else
         {
             timer.Enabled = false;
             IsStarted = false;
+            blink = "blink";
         }
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
-    private void ResumeStopwatch()
+    private async void ResumeStopwatch()
     {
         timer.Start();
+        blink = "";
+        if (_counter == 0)
+        {
+            if (currentNumber == NumberOfTimes)
+            {
+                // send info to parent compontent
+                currentNumber = 1;
+                await InvokeAsync(() => ExerciseFinished.InvokeAsync());
+                IsStarted = true;
+                StartStopwatch();
+                return;
+            }
+            currentNumber += 1;
+            IsStarted = true;
+            StartStopwatch();
+        }
     }
     private void StopStopwatch()
     {
         timer.Stop();
+        blink = "";
     }
+
 }

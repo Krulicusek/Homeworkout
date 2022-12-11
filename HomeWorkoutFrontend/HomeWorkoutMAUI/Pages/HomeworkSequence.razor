@@ -5,25 +5,23 @@
 @inject ExerciseService ExerciseService
 @page "/homeworkSequence"
 <GridRow Type="flex" Justify="center">
-    <Space Size="@size" Direction="DirectionVHType.Vertical">
+    <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
         @if (homeworkSequenceModel != null && exerciseList.Count > 0)
         {
             <SpaceItem>
-                <Row>
-                    <p>
-                        @($"Sequence estimated time: {homeworkSequenceModel.EstimatedTimeInMinutes} minutes")
-                    </p>
-                </Row>
+                <Text Strong>
+                    @($"Sequence estimated time: {homeworkSequenceModel.EstimatedTimeInMinutes} minutes")
+                </Text>
             </SpaceItem>
             @foreach (var exercise in exerciseList)
             {
                 <GridCol>
                     <SpaceItem>
-                        <Card Style="width:300px" Title="@exercise.Name">
+                        <Card Style="width:300px" Title="@exercise.Name" Id=@($"{exercise.Id}")>
                             <Body>
                                 <Space Size="@size" Direction="DirectionVHType.Vertical">
                                     <SpaceItem>
-                                        <Image Src="@exercise.ImageSource" Width="250px" />
+                                        <Image Src="@exercise.ImageSource" />
                                     </SpaceItem>
                                     <SpaceItem>
                                         <Descriptions>
@@ -35,7 +33,7 @@
                                                     .Seconds
                                                     )
                                             </DescriptionsItem>
-                                            <DescriptionsItem Title="NumberOfTimes">
+                                            <DescriptionsItem Title="Number of times">
                                                 @(
                                                     homeworkSequenceModel
                                                     .HomeworkICollection
@@ -58,12 +56,27 @@
                 </GridCol>
             }
         }
-        <Modal Title="Stopwatch"
-               Visible="@_visible"            
+        <Modal Title="@modalTitle"
+               Visible="_visible"
                OnCancel="@HandleCancel"
-                Footer=null>               
-            <Stopwatch IsStarted=isStarted Counter=counter>
-            </Stopwatch>
+               
+               Footer=null>
+            @if (!sequenceIsDone)
+            {
+                           <Stopwatch IsStarted=isStarted
+                                   Counter=counter
+                                   NumberOfTimes=numberOfTimes
+                                   ExerciseModel="currentExercise"
+                                   ExerciseFinished="@HandleExerciseFinished">
+                </Stopwatch>
+            }
+            else
+            {
+                <Result Status="success"
+                    Title="Sequence finished"
+                    SubTitle="Congratulations on improving your form!">
+                </Result>
+            }
         </Modal>
     </Space>
 </GridRow>
@@ -75,8 +88,25 @@
     private bool isStarted = false;
     private int counter;
     bool _visible = false;
+    private int numberOfTimes;
+    private ExerciseModel currentExercise;
+    private bool exerciseFinished;
+    private int currentPlaceInSequence;
+    private bool sequenceIsDone = false;
+    private string modalTitle;
 
+    private string currentExerciseName()
+    {
+        if (currentExercise == null)
+        {
+            return "";
+        }
+        else
+        {
+            return currentExercise.Name;
+        }
 
+    }
     private void HandleCancel(MouseEventArgs e)
     {
         _visible = false;
@@ -105,10 +135,36 @@
             }
         }
     }
+    public void HandleExerciseFinished()
+    {
+        if (homeworkSequenceModel.HomeworkICollection.Count.CompareTo(currentPlaceInSequence) != 0)
+        {
+            int nextExerciseId = homeworkSequenceModel.HomeworkICollection.SingleOrDefault(x => x.PlaceInSequence == currentPlaceInSequence + 1).ExerciseModelId;
+            if (nextExerciseId != null)
+            {
+                ExerciseModel nextExercise = exerciseList.Single(x => x.Id == nextExerciseId);
+
+                if (nextExercise != null)
+                {
+                    StartStopwatch(nextExercise);
+                }
+            }
+        }
+        else
+        {
+            sequenceIsDone = true;
+            modalTitle = "Finished";
+        }
+    }
+
     private void StartStopwatch(ExerciseModel exercise)
     {
         isStarted = true;
         counter = homeworkSequenceModel.HomeworkICollection.Single(x => x.ExerciseModelId == exercise.Id).Seconds;
+        numberOfTimes = homeworkSequenceModel.HomeworkICollection.Single(x => x.ExerciseModelId == exercise.Id).NumberOfTimes;
+        currentPlaceInSequence = homeworkSequenceModel.HomeworkICollection.Single(x => x.ExerciseModelId == exercise.Id).PlaceInSequence;
+        currentExercise = exercise;
+        modalTitle = currentExerciseName();
         _visible = true;
     }
 
