@@ -23,12 +23,13 @@ namespace HomeWorkoutMAUI
             builder.Services.AddAntDesign();
 
             /// when connecting from other machine than localhost u have to swap out "localhost" for an IPv4 adress
-            ///             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
+                         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7057") });
             ///         builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.0.120:3000") });  <- to działa z iisproxy oraz proxy na emulatorze 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.0.120:3000") });            
+            //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.0.120:3000") });            
             builder.Services.AddSingleton<ExerciseService>();
             builder.Services.AddSingleton<HomeworkSequenceService>();
             builder.Services.AddSingleton<IAppService, AppService>();
+            builder.Services.AddSingleton<ICrudExerciseService, CrudExerciseService>();
             return builder.Build();
         }
     }

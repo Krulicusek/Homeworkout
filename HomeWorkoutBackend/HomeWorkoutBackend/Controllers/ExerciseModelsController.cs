@@ -41,7 +41,7 @@ namespace HomeWorkoutBackend.Controllers
             _context.SaveChanges();
         }
         [HttpPut("{id}", Name = "PutExerciseModel")]
-        public void Put(int id, ExerciseModel exerciseModel)
+        public void Put(int id,[FromBody]ExerciseModel exerciseModel)
         {
             _context.ExerciseModel.Update(exerciseModel);
             _context.SaveChanges();

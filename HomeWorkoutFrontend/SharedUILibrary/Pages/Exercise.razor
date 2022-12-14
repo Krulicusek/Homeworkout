@@ -1,4 +1,6 @@
 ﻿@inject ExerciseService ExerciseService
+@inject ExerciseService ExerciseService
+@inject NavigationManager navigationManager
 
 <GridRow Type="flex" Justify="center">
 
@@ -21,7 +23,8 @@
                                 </Space>
                             </Body>
                             <Extra>
-                                <a>More</a>
+                                <button @onclick= "() =>Edit(exercise.Id)">Edit </button>
+                                <button @onclick= "() =>Delete(exercise.Id)">Delete </button>
                             </Extra>
                         </Card>
                     </SpaceItem>
@@ -38,5 +41,14 @@
     protected override async Task OnInitializedAsync()
     {
         exerciseList = ExerciseService.GetExerciseModels();
+    }
+
+    private void Edit(int id)
+    {
+        navigationManager.NavigateTo($"/edit/{id}");
+    }
+    private void Delete(int id)
+    {
+        navigationManager.NavigateTo($"/delete/{id}");
     }
 }

@@ -1,0 +1,66 @@
+﻿@page "/edit"
+@page "/edit/{Id:int}"
+@using AntDesign;
+@using HomeWorkoutModels.Models;
+@using SharedUILibrary.Services;
+@using SharedUILibrary.Interfaces;
+@using Newtonsoft.Json;
+@using System.Security.Claims;
+@using Microsoft.AspNetCore.Components;
+@inject ICrudExerciseService CrudExerciseService;
+@inject NavigationManager NavManager;
+
+<h3>Edit Exercise</h3>
+
+<EditForm Model="@exerciseModel" OnValidSubmit="Submit">
+    <input type="hidden" asp-for="Id" />
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Name</label>
+        <input @bind-value="exerciseModel.Name" class="form-control" placeholder="Enter new name">
+        <ValidationMessage For="@(()=> exerciseModel.Name)" />
+    </div>
+    <div class="form-group">
+        <label>Tag</label>
+        <input @bind-value="exerciseModel.Tag" class="form-control" placeholder="Enter new tag">
+        <ValidationMessage For="@(()=> exerciseModel.Tag)" />
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <input @bind-value="exerciseModel.Description" class="form-control" placeholder="Enter new Description">
+        <ValidationMessage For="@(()=> exerciseModel.Description)" />
+    </div>
+    <div class="form-group">
+        <label>Foto Url</label>
+        <input @bind-value="exerciseModel.ImageSource" class="form-control" placeholder="Enter new Image uri">
+        <ValidationMessage For="@(()=> exerciseModel.ImageSource)" />
+    </div>
+    <div ckass="text-center mt-2">
+       <Button Type="@ButtonType.Primary" HtmlType="submit">
+            <span role="status" aroa-hidden="true"></span>
+            Submit
+        </Button>
+    </div> 
+ </EditForm>
+
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    ExerciseModel exerciseModel = new();
+    private async void Submit()
+    {
+        exerciseModel.Id = (int)Id;
+        var response = await CrudExerciseService.EditAsync(exerciseModel);
+        if(response == true)
+        {
+            NavManager.NavigateTo("/exercise");
+        }
+        else
+        {
+            await App.Current.MainPage.DisplayAlert("Oops", "Something went wrong!", "OK");
+        }
+    }
+}
