@@ -39,7 +39,7 @@ namespace HomeWorkoutBackend.Controllers
                 LastName = dto.LastName,
                 Email = dto.Email,
                 Gender = dto.Gender,
-                RoleId = 1,
+                Role = dto.Role
             };
             newUser.PasswordHash = _passwordHasher.HashPassword(newUser, dto.Password);
             _context.Users.Add(newUser);
@@ -72,7 +72,7 @@ namespace HomeWorkoutBackend.Controllers
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.Name,user.FirstName),
                 new Claim(ClaimTypes.Surname, user.LastName),
-                new Claim(ClaimTypes.Role, user.Role.Name),
+                new Claim(ClaimTypes.Role, user.Role),
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authenticationSettings.JwtKey));

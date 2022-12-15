@@ -19,7 +19,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<HomeWorkoutContext>();
-builder.Services.AddScoped<Seeder>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 //builder.WebHost.UseUrls("https://*:7057");
 // Authentication
@@ -46,8 +45,6 @@ builder.Services.AddAuthentication(option =>
 
 AppSettings appSettings = new AppSettings(configuration);
 appSettings.GetServerSettings();
-Seeder seeder = new Seeder(new HomeWorkoutContext());
-seeder.Seed();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

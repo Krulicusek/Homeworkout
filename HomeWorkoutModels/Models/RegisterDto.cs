@@ -17,6 +17,8 @@ namespace HomeWorkoutModels.Models
         [Required]
         public string Email { get; set; }
         [Required]
+        public string Role { get; set; }
+        [Required]
         public string Password { get; set; }
         [Required]
         [Compare("Password", ErrorMessage = "Password and Confirmed Password must match.")]

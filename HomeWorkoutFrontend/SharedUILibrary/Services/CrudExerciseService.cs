@@ -16,6 +16,20 @@ namespace SharedUILibrary.Services
         {
             this.httpClient = httpClient;
         }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var result = await httpClient.DeleteAsync(APIs.BaseUrl + APIs.DeleteExerciseModel + $"?id={id}");
+            if (result.IsSuccessStatusCode)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         async Task<bool> ICrudExerciseService.EditAsync(ExerciseModel exerciseModel)
         {
             var result = await httpClient.PutAsJsonAsync(APIs.BaseUrl + APIs.EditExerciseModel + $"/{exerciseModel.Id}", exerciseModel);

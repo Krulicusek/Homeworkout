@@ -24,7 +24,7 @@
                             </Body>
                             <Extra>
                                 <button @onclick= "() =>Edit(exercise.Id)">Edit </button>
-                                <button @onclick= "() =>Delete(exercise.Id)">Delete </button>
+                                @*<button @onclick= "() =>Delete(exercise.Id)">Delete </button>*@
                             </Extra>
                         </Card>
                     </SpaceItem>
@@ -47,8 +47,8 @@
     {
         navigationManager.NavigateTo($"/edit/{id}");
     }
-    private void Delete(int id)
-    {
-        navigationManager.NavigateTo($"/delete/{id}");
-    }
+    //private void Delete(int id)
+    //{
+    //    navigationManager.NavigateTo("/delete");
+    //}
 }

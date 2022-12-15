@@ -12,5 +12,6 @@ namespace HomeWorkoutModels.Models
         public const string AuthenticateUser = "/Account/login";
         public const string RegistrationUser = "/Account/register";
         public const string EditExerciseModel = "/ExerciseModels";
+        public const string DeleteExerciseModel = "/ExerciseModels";
     }
 }
