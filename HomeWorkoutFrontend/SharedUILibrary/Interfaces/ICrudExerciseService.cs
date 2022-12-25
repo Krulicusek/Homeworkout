@@ -6,5 +6,6 @@ namespace SharedUILibrary.Interfaces
     {
         Task<bool> EditAsync(ExerciseModel exerciseModel);
         Task<bool> DeleteAsync(int id);
+        Task<bool> AddAsync(ExerciseModel exerciseModel);
     }
 }

@@ -17,6 +17,15 @@ namespace SharedUILibrary.Services
             this.httpClient = httpClient;
         }
 
+        public async Task<bool> AddAsync(ExerciseModel exerciseModel)
+        {
+            var result = await httpClient.PostAsJsonAsync(APIs.BaseUrl + APIs.AddExerciseModel, exerciseModel);
+            if (result.IsSuccessStatusCode)
+                return true;
+            else
+                return false;
+        }
+
         public async Task<bool> DeleteAsync(int id)
         {
             var result = await httpClient.DeleteAsync(APIs.BaseUrl + APIs.DeleteExerciseModel + $"?id={id}");

@@ -23,7 +23,7 @@
                                 </Space>
                             </Body>
                             <Extra>
-                                <button @onclick= "() =>Edit(exercise.Id)">Edit </button>
+                                <Button OnClick="() =>Edit(exercise.Id)">Edit </Button>
                                 @*<button @onclick= "() =>Delete(exercise.Id)">Delete </button>*@
                             </Extra>
                         </Card>
@@ -33,6 +33,7 @@
         }
     </Space>
 </GridRow>
+<Button OnClick="() =>Add()">Add exercise</Button>
 
 @code {
     private string size = "large";
@@ -51,4 +52,8 @@
     //{
     //    navigationManager.NavigateTo("/delete");
     //}
+    private void Add()
+    {
+        navigationManager.NavigateTo($"/add");
+    }
 }
