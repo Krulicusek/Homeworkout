@@ -28,7 +28,7 @@ namespace SharedUILibrary.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var result = await httpClient.DeleteAsync(APIs.BaseUrl + APIs.DeleteExerciseModel + $"?id={id}");
+            var result = await httpClient.DeleteAsync(APIs.BaseUrl + APIs.DeleteExerciseModel + $"/{id}");
             if (result.IsSuccessStatusCode)
             {
                 return true;

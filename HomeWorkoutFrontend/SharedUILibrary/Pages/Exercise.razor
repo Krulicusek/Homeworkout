@@ -1,9 +1,15 @@
-﻿@inject ExerciseService ExerciseService
+﻿@using SharedUILibrary.Interfaces;
+@inject ExerciseService ExerciseService
 @inject ExerciseService ExerciseService
 @inject NavigationManager navigationManager
+@inject ICrudExerciseService CrudExerciseService;
 
+<Button OnClick="() =>Add()">Add exercise</Button>
+<br />
+<br />
+<br />
 <GridRow Type="flex" Justify="center">
-
+    
     <Space Size="@size" Direction="DirectionVHType.Vertical">
         @if (exerciseList != null)
         {
@@ -24,7 +30,16 @@
                             </Body>
                             <Extra>
                                 <Button OnClick="() =>Edit(exercise.Id)">Edit </Button>
-                                @*<button @onclick= "() =>Delete(exercise.Id)">Delete </button>*@
+                                <Button OnClick="() => ShowModal(exercise.Id)">
+                                    Delete
+                                </Button>
+                                <Modal Title="@("Delete")"
+                                    Visible="@_visible"
+                                    OnOk="HandleOk"
+                                    OnCancel="@HandleCancel"
+                                    ConfirmLoading="@_confirmLoading">
+                                    <p>@_modalText</p>
+                                </Modal>
                             </Extra>
                         </Card>
                     </SpaceItem>
@@ -33,11 +48,12 @@
         }
     </Space>
 </GridRow>
-<Button OnClick="() =>Add()">Add exercise</Button>
+
 
 @code {
     private string size = "large";
     private List<ExerciseModel> exerciseList;
+    private int idToDelete;
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,10 +64,36 @@
     {
         navigationManager.NavigateTo($"/edit/{id}");
     }
-    //private void Delete(int id)
-    //{
-    //    navigationManager.NavigateTo("/delete");
-    //}
+
+    bool _visible = false;
+    bool _confirmLoading = false;
+    string _modalText = "Are you sure you want to delete this exercise?";
+
+    private void ShowModal(int id)
+    {
+        _visible = true;
+        idToDelete = id;
+
+    }
+
+
+    private async Task HandleOk()
+    {
+        _modalText = "Are you sure you want to delete this exercise?";
+        _confirmLoading = true;
+        StateHasChanged();
+        var result = await CrudExerciseService.DeleteAsync(idToDelete);
+        _visible = false;
+        _confirmLoading = false;
+        if (result == true)
+            navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true);
+    }
+
+    private void HandleCancel(MouseEventArgs e)
+    {
+        _visible = false;
+    }
+
     private void Add()
     {
         navigationManager.NavigateTo($"/add");
