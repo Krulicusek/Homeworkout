@@ -1,6 +1,6 @@
 ﻿@using HomeWorkoutModels.Models;
 @using Newtonsoft.Json;
-@using SharedUILibrary.Components
+@using SharedUILibrary.Components;
 @inject HomeworkSequenceService HomeWorkSequenceService
 @inject ExerciseService ExerciseService
 @page "/homeworkSequence"
@@ -49,25 +49,31 @@
                                 </Space>
                             </Body>
                             <Extra>
-                                <a>More</a>
+                                @if (isPhysio())
+                                {
+                                    <Text>Edit</Text>
+                                }
                             </Extra>
                         </Card>
                     </SpaceItem>
                 </GridCol>
             }
         }
+        else
+        {
+            <Text>You do not have homework :)</Text>
+        }
         <Modal Title="@modalTitle"
                Visible="_visible"
                OnCancel="@HandleCancel"
-               
                Footer=null>
             @if (!sequenceIsDone)
             {
-                           <Stopwatch IsStarted=isStarted
-                                   Counter=counter
-                                   NumberOfTimes=numberOfTimes
-                                   ExerciseModel="currentExercise"
-                                   ExerciseFinished="@HandleExerciseFinished">
+                <Stopwatch IsStarted=isStarted
+                       Counter=counter
+                       NumberOfTimes=numberOfTimes
+                       ExerciseModel="currentExercise"
+                       ExerciseFinished="@HandleExerciseFinished">
                 </Stopwatch>
             }
             else
@@ -85,6 +91,7 @@
     private string size = "large";
     private HomeworkSequenceModel homeworkSequenceModel;
     private List<ExerciseModel> exerciseList = new List<ExerciseModel>();
+    UserBasicDetail userBasicDetail;
     private bool isStarted = false;
     private int counter;
     bool _visible = false;
@@ -94,6 +101,18 @@
     private int currentPlaceInSequence;
     private bool sequenceIsDone = false;
     private string modalTitle;
+
+    private bool isPhysio()
+    {
+        if (userBasicDetail != null)
+        {
+            return userBasicDetail.Role == "physiotherapist" ? true : false;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     private string currentExerciseName()
     {
@@ -121,20 +140,22 @@
     private async Task PrepareHomeWorkoutSequenceModel()
     {
         string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
-        UserBasicDetail userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+       userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+
         if (userBasicDetail != null)
         {
-            homeworkSequenceModel = HomeWorkSequenceService.GetHomeworkSequence(userBasicDetail.Id);
+            homeworkSequenceModel = await HomeWorkSequenceService.GetHomeworkSequence(userBasicDetail.Id);       
         }
-
+       
         if (homeworkSequenceModel != null)
         {
             foreach (var homework in homeworkSequenceModel.HomeworkICollection)
             {
                 exerciseList.Add(ExerciseService.GetExerciseModel(homework.ExerciseModelId));
             }
-        }
+        }    
     }
+
     public void HandleExerciseFinished()
     {
         if (homeworkSequenceModel.HomeworkICollection.Count.CompareTo(currentPlaceInSequence) != 0)

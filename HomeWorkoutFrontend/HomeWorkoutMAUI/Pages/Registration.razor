@@ -106,7 +106,7 @@
         var response = await AppService.RegistgerUser(registrationModel);
         if (response.isSuccess)
         {
-            await App.Current.MainPage.DisplayAlert("Oops", "Registration successful", "OK");
+            await App.Current.MainPage.DisplayAlert("Congratulations", "Registration successful", "OK");
             NavManager.NavigateTo("/login");
         }
         else

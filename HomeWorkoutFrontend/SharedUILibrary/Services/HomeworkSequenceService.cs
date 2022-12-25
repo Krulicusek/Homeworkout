@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,11 +16,19 @@ namespace SharedUILibrary.Services
         {
             this.httpClient = httpClient;
         }
-        public HomeworkSequenceModel GetHomeworkSequence(string id)
+        public async Task<HomeworkSequenceModel> GetHomeworkSequence(string id)
         {
-            HomeworkSequenceModel homeworkSequenceModel = new HomeworkSequenceModel();
-            homeworkSequenceModel = httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/HomeworkSequence/{id}").Result;
-            return homeworkSequenceModel;
+            try
+            {
+                var response = await httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/HomeworkSequence/{id}");
+                return response;
+            }
+            catch
+            {
+
+            }
+            return null;
+
         }
     }
 }

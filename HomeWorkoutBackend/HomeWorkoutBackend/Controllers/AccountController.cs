@@ -53,8 +53,7 @@ namespace HomeWorkoutBackend.Controllers
         {
             var user = _context
                 .Users
-                .AsNoTracking()
-                .Include(r => r.Role)
+                .AsNoTracking()          
                 .FirstOrDefault(e => e.Email == dto.Email);
             if (user is null)
             {
