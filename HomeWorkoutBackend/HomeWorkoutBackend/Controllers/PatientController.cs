@@ -1,4 +1,5 @@
 ﻿using homeWorkOutApi.Net6._0.Data;
+using HomeWorkoutModels.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HomeWorkoutBackend.Controllers
@@ -15,14 +16,29 @@ namespace HomeWorkoutBackend.Controllers
             _logger = logger;
         }
         [HttpGet("{id}", Name = "GetPatients")]
-        public List<User> GetPatients(int id)
+        public List<UserBasicDetail> GetPatients(int id)
         {
-            return _context.Users.Where(x=>x.PhysioId == id).ToList();
+            var userList  = _context.Users.Where(x => x.PhysioId == id).ToList();
+            List<UserBasicDetail> basicDetails= new List<UserBasicDetail>();
+            foreach (var user in userList)
+            {
+                var userBasic = new UserBasicDetail(user);
+                basicDetails.Add(userBasic);
+            }
+            return basicDetails;
         }
+
         [HttpGet(Name = "GetPhysiotherapists")]
-        public List<User> GetPhysiotherapists()
+        public List<UserBasicDetail> GetPhysiotherapists()
         {
-            return _context.Users.Where(x => x.Role == "physiotherapist").ToList();
+            var userList = _context.Users.Where(x => x.Role == "physiotherapist").ToList();
+            List<UserBasicDetail> basicDetails = new List<UserBasicDetail>();
+            foreach (var user in userList)
+            {
+                var userBasic = new UserBasicDetail(user);
+                basicDetails.Add(userBasic);
+            }
+            return basicDetails;
         }
     }
 }

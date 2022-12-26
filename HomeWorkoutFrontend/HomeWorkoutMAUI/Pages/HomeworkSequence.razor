@@ -140,7 +140,7 @@
     private async Task PrepareHomeWorkoutSequenceModel()
     {
         string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
-       userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+        userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
 
         if (userBasicDetail != null)
         {

@@ -24,12 +24,12 @@ namespace HomeWorkoutBackend.Controllers
                 .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))          
                 .ToArray();
         }
-        [HttpGet("{id}", Name = "GetHomeworkSequence")]
-        public HomeworkSequenceModel Get(int id)
+        [HttpGet("{userId}", Name = "GetHomeworkSequence")]
+        public HomeworkSequenceModel Get(int userId)
         {
             return _context.HomeworkSequenceModel
                 .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
-                .FirstOrDefault(x => x.Id == id);
+                .FirstOrDefault(x => x.UserId == userId);
         }
 
         [HttpPost(Name = "PostHomeworkSequence")]

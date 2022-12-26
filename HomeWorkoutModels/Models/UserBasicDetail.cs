@@ -14,5 +14,16 @@ namespace HomeWorkoutModels.Models
         public string Email { get; set; }
         public string Role { get; set; }
         public string Token { get; set; }
+        public string PhysioId { get; set; }
+        public UserBasicDetail() { }
+        public UserBasicDetail(User user)
+        {
+            this.Id = user.Id.ToString();
+            this.Name = user.FirstName;
+            this.Surname = user.LastName;
+            this.Email = user.Email;
+            this.Role = user.Role;
+            this.PhysioId= user.PhysioId.ToString();
+        }
     }
 }
