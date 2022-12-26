@@ -24,7 +24,14 @@ Loading ...
 			}
 			else
 			{
-				NavManager.NavigateTo("/homeworkSequence");
+				if (userBasicDetail.Role == "patient")
+				{
+					NavManager.NavigateTo("/homeworkSequence");
+				}
+				else
+				{
+					NavManager.NavigateTo("/Patients");
+				}				
 				Setting.UserBasicDetail = userBasicDetail;
 			}
 		}

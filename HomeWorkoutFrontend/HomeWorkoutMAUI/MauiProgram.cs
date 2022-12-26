@@ -28,6 +28,7 @@ namespace HomeWorkoutMAUI
             //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("http://10.0.0.120:3000") });            
             builder.Services.AddSingleton<ExerciseService>();
             builder.Services.AddSingleton<HomeworkSequenceService>();
+            builder.Services.AddSingleton <PatientService>();
             builder.Services.AddSingleton<IAppService, AppService>();
             builder.Services.AddSingleton<ICrudExerciseService, CrudExerciseService>();
             return builder.Build();

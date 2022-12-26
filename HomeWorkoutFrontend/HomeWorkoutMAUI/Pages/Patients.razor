@@ -1,5 +1,54 @@
-﻿<h3>Patients</h3>
+﻿@using HomeWorkoutModels.Models;
+@using Newtonsoft.Json;
+@inject PatientService PatientService
+@page "/Patients"
+
+<GridRow Type="flex" Justify="center">
+    <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
+        @if (patientList != null && patientList.Count > 0)
+        {
+
+            @foreach (var patient in patientList)
+            {
+                <Card Style="width:300px" Title="@($"{patient.Name} {patient.Surname}")">
+                    <Body>
+                        <Space Size="@size" Direction="DirectionVHType.Vertical">
+                       
+                        </Space>
+                    </Body>
+                </Card>
+            }
+
+        }
+        else
+        {
+            <SpaceItem>
+                <Text Strong>
+                    No patients associated with this user
+                </Text>
+            </SpaceItem>
+        }
+    </Space>
+</GridRow>
 
 @code {
+    private List<UserBasicDetail> patientList;
+    private string size = "large";
 
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => PreparePatients());
+    }
+
+    private async Task PreparePatients()
+    {
+        patientList = new List<UserBasicDetail>();
+        string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
+        var userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+
+        if (userBasicDetail != null)
+        {
+            patientList = PatientService.GetPatients(userBasicDetail.PhysioId);
+        }
+    }
 }

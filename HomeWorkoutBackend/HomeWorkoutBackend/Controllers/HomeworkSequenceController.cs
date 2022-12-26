@@ -1,6 +1,5 @@
 ﻿using homeWorkOutApi.Net6._0.Data;
 using HomeWorkoutModels.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,15 +16,25 @@ namespace HomeWorkoutBackend.Controllers
             _context = context;
             _logger = logger;
         }
+
         [HttpGet(Name = "GetAllHomeworkSequenceModels")]
         public IEnumerable<HomeworkSequenceModel> GetAll()
         {
             return _context.HomeworkSequenceModel
-                .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))          
+                .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
                 .ToArray();
         }
-        [HttpGet("{userId}", Name = "GetHomeworkSequence")]
-        public HomeworkSequenceModel Get(int userId)
+
+        [HttpGet("{id}", Name = "GetHomeworkSequenceById")]
+        public HomeworkSequenceModel GetHomeworkSequenceById(int id)
+        {
+            return _context.HomeworkSequenceModel
+                .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        [HttpGet("userId/{userId}", Name = "GetHomeworkSequenceByUserId")]
+        public HomeworkSequenceModel GetHomeworkSequenceByUserId(int userId)
         {
             return _context.HomeworkSequenceModel
                 .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
@@ -38,12 +47,14 @@ namespace HomeWorkoutBackend.Controllers
             _context.HomeworkSequenceModel.Add(homeworkSequence);
             _context.SaveChanges();
         }
+
         [HttpDelete("{id}", Name = "DeleteHomeworkSequence")]
         public void Delete(int id)
         {
-            _context.HomeworkSequenceModel.Remove(Get(id));
+            _context.HomeworkSequenceModel.Remove(GetHomeworkSequenceById(id));
             _context.SaveChanges();
         }
+
         [HttpPut("{id}", Name = "PutHomeworkSequence")]
         public void Put(int id, HomeworkSequenceModel homeworkSequence)
         {

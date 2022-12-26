@@ -144,7 +144,7 @@
 
         if (userBasicDetail != null)
         {
-            homeworkSequenceModel = await HomeWorkSequenceService.GetHomeworkSequence(userBasicDetail.Id);       
+            homeworkSequenceModel = await HomeWorkSequenceService.GetHomeworkSequenceByUserId(userBasicDetail.Id);       
         }
        
         if (homeworkSequenceModel != null)

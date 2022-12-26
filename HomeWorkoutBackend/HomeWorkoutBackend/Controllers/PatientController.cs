@@ -15,7 +15,7 @@ namespace HomeWorkoutBackend.Controllers
             _context = context;
             _logger = logger;
         }
-        [HttpGet("{id}", Name = "GetPatients")]
+        [HttpGet("GetPatients/{id}", Name = "GetPatients")]
         public List<UserBasicDetail> GetPatients(int id)
         {
             var userList  = _context.Users.Where(x => x.PhysioId == id).ToList();
@@ -28,7 +28,7 @@ namespace HomeWorkoutBackend.Controllers
             return basicDetails;
         }
 
-        [HttpGet(Name = "GetPhysiotherapists")]
+        [HttpGet("GetPhysiotherapists", Name = "GetPhysiotherapists")]
         public List<UserBasicDetail> GetPhysiotherapists()
         {
             var userList = _context.Users.Where(x => x.Role == "physiotherapist").ToList();

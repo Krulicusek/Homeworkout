@@ -16,11 +16,11 @@ namespace SharedUILibrary.Services
         {
             this.httpClient = httpClient;
         }
-        public async Task<HomeworkSequenceModel> GetHomeworkSequence(string id)
+        public async Task<HomeworkSequenceModel> GetHomeworkSequenceByUserId(string userId)
         {
             try
             {
-                var response = await httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/HomeworkSequence/{id}");
+                var response = await httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/HomeworkSequence/userId/{userId}");
                 return response;
             }
             catch
