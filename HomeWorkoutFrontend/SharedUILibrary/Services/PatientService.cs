@@ -17,13 +17,13 @@ namespace SharedUILibrary.Services
         }
         public List<UserBasicDetail> GetPhysiotherapists()
         {
-           return httpClient.GetFromJsonAsync<List<UserBasicDetail>>($"Patient/GetPhysiotherapists").Result;
+           return httpClient.GetFromJsonAsync<List<UserBasicDetail>>($"/Patient/GetPhysiotherapists").Result;
         }
         public  List<UserBasicDetail> GetPatients(string physioId)
         {
             try
             {
-                var response =  httpClient.GetFromJsonAsync<List<UserBasicDetail>>($"Patient/GetPatients/{physioId}").Result;
+                var response =  httpClient.GetFromJsonAsync<List<UserBasicDetail>>($"/Patient/GetPatients/{physioId}").Result;
                 return response;
             }
             catch { }

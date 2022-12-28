@@ -19,7 +19,7 @@ namespace SharedUILibrary.Services
         }
         public ExerciseModel GetExerciseModel(int id)
         {
-            ExerciseModel exercise =  httpClient.GetFromJsonAsync<ExerciseModel>($"ExerciseModels/{id}").Result;
+            ExerciseModel exercise = httpClient.GetFromJsonAsync<ExerciseModel>($"ExerciseModels/{id}").Result;
             return exercise;
         }
     }

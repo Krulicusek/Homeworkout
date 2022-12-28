@@ -7,19 +7,30 @@
     <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
         @if (patientList != null && patientList.Count > 0)
         {
-
-            @foreach (var patient in patientList)
-            {
-                <Card Style="width:300px" Title="@($"{patient.Name} {patient.Surname}")">
-                    <Body>
-                        <Space Size="@size" Direction="DirectionVHType.Vertical">
-                       
-                        </Space>
-                    </Body>
-                </Card>
-            }
-
-        }
+            <SpaceItem>
+                <Text Strong>
+                    Select patient to add personalized homework
+                </Text>
+            </SpaceItem>
+ @*           @foreach (var patient in patientList)
+            {         
+                <SpaceItem>
+                    <Card Style="width:300px">
+                        <CardMeta AvatarTemplate="@avatarTemplate" Title="@($"{patient.Name} {patient.Surname}")">
+                        </CardMeta>
+                    </Card>
+                </SpaceItem>
+            }*@
+            <AntList Style="width:300px" DataSource="@patientList" TItem="UserBasicDetail" Split=true>
+                <ListItem OnClick="()=>ItemClick(context.Name)">
+                    <ListItemMeta AvatarTemplate="avatar" Description=@($"{context.Name} {context.Surname}")>
+                        <TitleTemplate>
+                            <a href="https://ng.ant.design">@context.Email</a>
+                        </TitleTemplate>
+                    </ListItemMeta>
+                </ListItem>
+            </AntList>           
+        }        
         else
         {
             <SpaceItem>
@@ -34,6 +45,9 @@
 @code {
     private List<UserBasicDetail> patientList;
     private string size = "large";
+    RenderFragment avatar = @<Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></Avatar>;
+    public UserBasicDetail UserBasicDetail { get; set; }
+   
 
     protected override async Task OnInitializedAsync()
     {
@@ -48,7 +62,13 @@
 
         if (userBasicDetail != null)
         {
-            patientList = PatientService.GetPatients(userBasicDetail.PhysioId);
+            patientList = PatientService.GetPatients(userBasicDetail.Id);
         }
     }
+
+    public void ItemClick(string title)
+    {
+        Console.WriteLine($"item was clicked: {title}");
+    }
 }
+
