@@ -1,6 +1,7 @@
 ﻿@using HomeWorkoutModels.Models;
 @using Newtonsoft.Json;
 @inject PatientService PatientService
+@inject NavigationManager NavManager;
 @page "/Patients"
 
 <GridRow Type="flex" Justify="center">
@@ -12,20 +13,12 @@
                     Select patient to add personalized homework
                 </Text>
             </SpaceItem>
- @*           @foreach (var patient in patientList)
-            {         
-                <SpaceItem>
-                    <Card Style="width:300px">
-                        <CardMeta AvatarTemplate="@avatarTemplate" Title="@($"{patient.Name} {patient.Surname}")">
-                        </CardMeta>
-                    </Card>
-                </SpaceItem>
-            }*@
+ 
             <AntList Style="width:300px" DataSource="@patientList" TItem="UserBasicDetail" Split=true>
-                <ListItem OnClick="()=>ItemClick(context.Name)">
-                    <ListItemMeta AvatarTemplate="avatar" Description=@($"{context.Name} {context.Surname}")>
+                <ListItem OnClick="()=>ItemClick(context.Id)">
+                    <ListItemMeta AvatarTemplate="avatar" Description=@context.Email>
                         <TitleTemplate>
-                            <a href="https://ng.ant.design">@context.Email</a>
+                           @($"{context.Name} {context.Surname}")
                         </TitleTemplate>
                     </ListItemMeta>
                 </ListItem>
@@ -66,9 +59,9 @@
         }
     }
 
-    public void ItemClick(string title)
+    public void ItemClick(string id)
     {
-        Console.WriteLine($"item was clicked: {title}");
+        NavManager.NavigateTo($"/addSequence/{id}");
     }
 }
 

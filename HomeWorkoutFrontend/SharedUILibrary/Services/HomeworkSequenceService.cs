@@ -20,7 +20,7 @@ namespace SharedUILibrary.Services
         {
             try
             {
-                var response = await httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"/HomeworkSequence/userId/{userId}");
+                var response = await httpClient.GetFromJsonAsync<HomeworkSequenceModel>($"{APIs.GetSequenceModelByUserId}/{userId}");
                 return response;
             }
             catch
@@ -29,6 +29,10 @@ namespace SharedUILibrary.Services
             }
             return null;
 
+        }
+        public void AddHomeworkSequence(HomeworkSequenceModel homeworkSequence)
+        {
+            httpClient.PostAsJsonAsync<HomeworkSequenceModel>($"{APIs.AddSequenceModel}", homeworkSequence);
         }
     }
 }
