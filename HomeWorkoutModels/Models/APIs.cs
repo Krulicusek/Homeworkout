@@ -14,5 +14,7 @@ namespace HomeWorkoutModels.Models
         public const string EditExerciseModel = "/ExerciseModels";
         public const string DeleteExerciseModel = "/ExerciseModels";
         public const string AddExerciseModel = "/ExerciseModels";
+        public const string AddSequenceModel = "/HomeworkSequence";
+        public const string GetSequenceModelByUserId = "/HomeworkSequence/userId";
     }
 }

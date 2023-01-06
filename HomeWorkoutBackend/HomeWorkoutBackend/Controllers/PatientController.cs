@@ -15,6 +15,7 @@ namespace HomeWorkoutBackend.Controllers
             _context = context;
             _logger = logger;
         }
+
         [HttpGet("GetPatients/{id}", Name = "GetPatients")]
         public List<UserBasicDetail> GetPatients(int id)
         {

@@ -1,0 +1,64 @@
+﻿@page "/addSequence"
+@page "/addSequence/{Id:int}"
+@using HomeWorkoutModels.Models;
+@inject ExerciseService ExerciseService
+@inject HomeworkSequenceService HomeworkSequenceService
+
+
+<AntList Style="width:300px" DataSource="@exerciseList" TItem="ExerciseModel" Split=true>
+    <ListItem OnClick="()=>ItemClick(context)">
+        <ListItemMeta Description=@context.Name>
+            <TitleTemplate>
+                <Image Style="width:150px" Src="@context.ImageSource"></Image>
+            </TitleTemplate>
+        </ListItemMeta>
+    </ListItem>
+    <Space>
+        <SpaceItem>
+            <Text>
+                number of times
+            </Text>
+            <AntDesign.InputNumber @bind-Value="@exerciseDictionary[context].NumberOfTimes" Min="0"></AntDesign.InputNumber>
+
+        </SpaceItem>
+        <SpaceItem>
+            <Text>
+                number of seconds
+            </Text>
+            <AntDesign.InputNumber @bind-Value="@exerciseDictionary[context].Seconds" Min="0"></AntDesign.InputNumber>
+        </SpaceItem>
+    </Space>
+
+
+
+</AntList>
+
+
+
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+    private string size = "large";
+    private List<ExerciseModel> exerciseList;
+    Dictionary<ExerciseModel, HomeworkModel> exerciseDictionary = new Dictionary<ExerciseModel, HomeworkModel>();
+    private HomeworkSequenceModel homeworkSequence;
+
+    protected override async Task OnInitializedAsync()
+    {
+        exerciseList = ExerciseService.GetExerciseModels();
+        foreach (var exercise in exerciseList)
+        {
+            HomeworkModel homeworkModel = new HomeworkModel();
+            exerciseDictionary.Add(exercise, homeworkModel);
+        }
+    }
+    void ItemClick(ExerciseModel exercise)
+    {
+
+    }
+    void Add()
+    {
+        HomeworkSequenceService.AddHomeworkSequence(homeworkSequence);
+    }
+}
