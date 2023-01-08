@@ -4,34 +4,53 @@
 @inject ExerciseService ExerciseService
 @inject HomeworkSequenceService HomeworkSequenceService
 
-
-<AntList Style="width:300px" DataSource="@exerciseList" TItem="ExerciseModel" Split=true>
-    <ListItem OnClick="()=>ItemClick(context)">
-        <ListItemMeta Description=@context.Name>
-            <TitleTemplate>
-                <Image Style="width:150px" Src="@context.ImageSource"></Image>
-            </TitleTemplate>
-        </ListItemMeta>
-    </ListItem>
-    <Space>
+<GridRow Type="flex" Justify="center">
+    <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
         <SpaceItem>
-            <Text>
-                number of times
+            <Text Strong>
+                Add exercise to sequence
             </Text>
-            <AntDesign.InputNumber @bind-Value="@exerciseDictionary[context].NumberOfTimes" Min="0"></AntDesign.InputNumber>
-
         </SpaceItem>
         <SpaceItem>
-            <Text>
-                number of seconds
-            </Text>
-            <AntDesign.InputNumber @bind-Value="@exerciseDictionary[context].Seconds" Min="0"></AntDesign.InputNumber>
+            <AntList Style="width:300px" DataSource="@exerciseList" TItem="ExerciseModel" Split=true ItemLayout="@ListItemLayout.Vertical">
+                <ChildContent>
+                    <ListItem OnClick="()=>ItemClick(context)">
+                        <Card>
+                            <Body>
+                                <ListItemMeta Description=@context.Name>
+                                    <TitleTemplate>
+                                        <Image Style="width:150px" Src="@context.ImageSource"></Image>
+                                    </TitleTemplate>
+                                </ListItemMeta>
+                                <Space Size="size" Direction="DirectionVHType.Vertical" Align="center">
+                                    <SpaceItem>
+                                        <Space>
+                                            <SpaceItem>
+                                                <Text>
+                                                    number of times
+                                                </Text>
+                                                <AntDesign.InputNumber @bind-Value="@exerciseDictionary[context].NumberOfTimes" Min="0"></AntDesign.InputNumber>
+                                            </SpaceItem>
+                                            <SpaceItem>
+                                                <Text>
+                                                    number of seconds
+                                                </Text>
+                                                <AntDesign.InputNumber @bind-Value="@exerciseDictionary[context].Seconds" Min="0"></AntDesign.InputNumber>
+                                            </SpaceItem>
+                                        </Space>
+                                    </SpaceItem>
+                                    <SpaceItem>
+                                        <Button>Add to sequence</Button>
+                                    </SpaceItem>
+                                </Space>
+                            </Body>
+                        </Card>
+                    </ListItem>
+                </ChildContent>
+            </AntList>
         </SpaceItem>
     </Space>
-
-
-
-</AntList>
+</GridRow>
 
 
 
@@ -43,6 +62,10 @@
     private List<ExerciseModel> exerciseList;
     Dictionary<ExerciseModel, HomeworkModel> exerciseDictionary = new Dictionary<ExerciseModel, HomeworkModel>();
     private HomeworkSequenceModel homeworkSequence;
+    private bool showModal = false;
+
+    //static RenderFragment add = @<Button>Add</Button>;
+    //public RenderFragment[] actions = new[] { add };
 
     protected override async Task OnInitializedAsync()
     {
