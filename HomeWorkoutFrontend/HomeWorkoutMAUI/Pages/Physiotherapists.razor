@@ -1,0 +1,73 @@
+﻿@using HomeWorkoutModels.Models;
+@using Newtonsoft.Json;
+@inject PatientService PatientService
+@page "/physiotherapists"
+
+<GridRow Type="flex" Justify="center">
+    <Space Size="@size" Direction="DirectionVHType.Vertical" Align="center">
+        @if (physiotherapistsList != null && physiotherapistsList.Count > 0)
+        {
+                <SpaceItem>
+                    <Text Strong>
+                            Select physiotherapist
+                    </Text>
+                </SpaceItem>
+            @foreach (var patient in physiotherapistsList)
+            {         
+                <SpaceItem>
+                    <Card Style="width:300px">
+                        <CardMeta Title="@($"{patient.Name} {patient.Surname}")">
+                        </CardMeta>
+                    </Card>
+                </SpaceItem>
+            }
+                    @*<AntList Style="width:300px" DataSource="@physiotherapistsList" TItem="UserBasicDetail" Split=true>
+                    <ListItem OnClick="()=>ItemClick(context.Name)">
+                        <ListItemMeta AvatarTemplate="avatar" Description=@($"{context.Name} {context.Surname}")>
+                            <TitleTemplate>
+                                <a href="https://ng.ant.design">@context.Email</a>
+                            </TitleTemplate>
+                        </ListItemMeta>
+                    </ListItem>
+                </AntList>     *@      
+        }
+        else
+        {
+                <SpaceItem>
+                    <Text Strong>
+                        No physiotherapists available
+                    </Text>
+                </SpaceItem>
+        }
+    </Space>
+</GridRow>
+
+@code {
+    private List<UserBasicDetail> physiotherapistsList;
+    private string size = "large";
+    RenderFragment avatar = @<Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></Avatar>;
+    public UserBasicDetail UserBasicDetail { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Run(() => PreparePhysiotherapists());
+    }
+
+    private async Task PreparePhysiotherapists()
+    {
+        physiotherapistsList = new List<UserBasicDetail>();
+        string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
+        var userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+
+        if (userBasicDetail != null)
+        {
+            physiotherapistsList = PatientService.GetPhysiotherapists();
+        }
+    }
+
+    public void ItemClick(string title)
+    {
+        Console.WriteLine($"item was clicked: {title}");
+    }
+}

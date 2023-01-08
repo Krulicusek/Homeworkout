@@ -4,10 +4,20 @@
 <div>
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            <NavLink class="nav-link" href="exercise">
-                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 11l-1 3l1 3h-1.5L9 14l.5-4.5L12 11Zm1-9L9 6v8l1 3H6l-3 5m17.5 0l-5-3.5L12 17l-1-3l1-3l3.5 2v5.5M14 8.5a1 1 0 1 1 0-2a1 1 0 0 1 0 2Zm-3 2L10 17v-3.5l1-3Z" /></svg>
-                <span class="title">Exercise</span>
-            </NavLink>
+            @if (isPhisio)
+            {
+                <NavLink class="nav-link" href="exercise">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 11l-1 3l1 3h-1.5L9 14l.5-4.5L12 11Zm1-9L9 6v8l1 3H6l-3 5m17.5 0l-5-3.5L12 17l-1-3l1-3l3.5 2v5.5M14 8.5a1 1 0 1 1 0-2a1 1 0 0 1 0 2Zm-3 2L10 17v-3.5l1-3Z" /></svg>
+                    <span class="title">Exercise</span>
+                </NavLink>
+            }
+            else
+            {
+                <NavLink class="nav-link" href="physiotherapists" Match="NavLinkMatch.All">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 11l-1 3l1 3h-1.5L9 14l.5-4.5L12 11Zm1-9L9 6v8l1 3H6l-3 5m17.5 0l-5-3.5L12 17l-1-3l1-3l3.5 2v5.5M14 8.5a1 1 0 1 1 0-2a1 1 0 0 1 0 2Zm-3 2L10 17v-3.5l1-3Z" /></svg>
+                    <span class="title">Physiotherapists</span>
+                </NavLink>
+            }
         </li>
         <li class="nav-item px-3">
             @if (isPhisio)
