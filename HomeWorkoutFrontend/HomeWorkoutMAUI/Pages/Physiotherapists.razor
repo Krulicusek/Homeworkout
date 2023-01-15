@@ -1,6 +1,7 @@
 ﻿@using HomeWorkoutModels.Models;
 @using Newtonsoft.Json;
 @inject PatientService PatientService
+@inject NavigationManager navigationManager
 @page "/physiotherapists"
 
 <GridRow Type="flex" Justify="center">
@@ -12,32 +13,33 @@
                             Select physiotherapist
                     </Text>
                 </SpaceItem>
-            @foreach (var patient in physiotherapistsList)
+            @foreach (var physiotherapist in physiotherapistsList)
             {         
                 <SpaceItem>
                     <Card Style="width:300px">
-                        <CardMeta Title="@($"{patient.Name} {patient.Surname}")">
-                        </CardMeta>
+                        <Body>
+                            <CardMeta Title="@($"{physiotherapist.Name} {physiotherapist.Surname}")">
+                            </CardMeta>
+                            <Button OnClick="() =>ShowModal(physiotherapist.Id)">Choose</Button>
+                            <Modal Title="@("Choose")"
+                           Visible="@_visible"
+                           OnOk="HandleOk"
+                           OnCancel="@HandleCancel"
+                           ConfirmLoading="@_confirmLoading">
+                                <p>@_modalText</p>
+                            </Modal>
+                        </Body>
                     </Card>
                 </SpaceItem>
-            }
-                    @*<AntList Style="width:300px" DataSource="@physiotherapistsList" TItem="UserBasicDetail" Split=true>
-                    <ListItem OnClick="()=>ItemClick(context.Name)">
-                        <ListItemMeta AvatarTemplate="avatar" Description=@($"{context.Name} {context.Surname}")>
-                            <TitleTemplate>
-                                <a href="https://ng.ant.design">@context.Email</a>
-                            </TitleTemplate>
-                        </ListItemMeta>
-                    </ListItem>
-                </AntList>     *@      
+            }    
         }
         else
         {
-                <SpaceItem>
-                    <Text Strong>
-                        No physiotherapists available
-                    </Text>
-                </SpaceItem>
+            <SpaceItem>
+                <Text Strong>
+                    No physiotherapists available
+                </Text>
+            </SpaceItem>
         }
     </Space>
 </GridRow>
@@ -47,6 +49,36 @@
     private string size = "large";
     RenderFragment avatar = @<Avatar Src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"></Avatar>;
     public UserBasicDetail UserBasicDetail { get; set; }
+
+    UserBasicDetail userBasicDetail;
+
+    public string idToPick;
+    bool _visible = false;
+    bool _confirmLoading = false;
+    string _modalText = "Are you sure you want to choose this physiotherapist?";
+
+    private void ShowModal(string id)
+    {
+        _visible = true;
+        idToPick = id;
+
+    }
+
+    private void HandleCancel(MouseEventArgs e)
+    {
+        _visible = false;
+    }
+
+    private async Task HandleOk()
+    {
+        _modalText = "Are you sure you want to choose this physiotherapist?";
+        _confirmLoading = true;
+        StateHasChanged();
+        await PatientService.ChoosePhysiotherapist(userBasicDetail.Id, idToPick);
+        _visible = false;
+        _confirmLoading = false;
+        navigationManager.NavigateTo("/exercise");
+    }
 
 
     protected override async Task OnInitializedAsync()
@@ -58,7 +90,7 @@
     {
         physiotherapistsList = new List<UserBasicDetail>();
         string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
-        var userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+        userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
 
         if (userBasicDetail != null)
         {

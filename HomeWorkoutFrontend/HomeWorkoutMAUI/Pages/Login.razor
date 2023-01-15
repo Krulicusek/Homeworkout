@@ -69,7 +69,7 @@
             string userBasicInfoStr = JsonConvert.SerializeObject(userBasicDetail);
             await SecureStorage.SetAsync(nameof(Setting.UserBasicDetail), userBasicInfoStr);
             Setting.UserBasicDetail = userBasicDetail;
-            NavManager.NavigateTo("/homeworkSequence");
+            NavManager.NavigateTo("/exercise");
         }
         else
         {

@@ -1,23 +1,15 @@
 ﻿@using HomeWorkoutModels.Models;
+@using Newtonsoft.Json;
+@inject PatientService PatientService
 @inject NavigationManager NavManager;
 
 <div>
     <ul class="nav flex-column">
         <li class="nav-item px-3">
-            @if (isPhisio)
-            {
                 <NavLink class="nav-link" href="exercise">
                     <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 11l-1 3l1 3h-1.5L9 14l.5-4.5L12 11Zm1-9L9 6v8l1 3H6l-3 5m17.5 0l-5-3.5L12 17l-1-3l1-3l3.5 2v5.5M14 8.5a1 1 0 1 1 0-2a1 1 0 0 1 0 2Zm-3 2L10 17v-3.5l1-3Z" /></svg>
                     <span class="title">Exercise</span>
                 </NavLink>
-            }
-            else
-            {
-                <NavLink class="nav-link" href="physiotherapists" Match="NavLinkMatch.All">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m12 11l-1 3l1 3h-1.5L9 14l.5-4.5L12 11Zm1-9L9 6v8l1 3H6l-3 5m17.5 0l-5-3.5L12 17l-1-3l1-3l3.5 2v5.5M14 8.5a1 1 0 1 1 0-2a1 1 0 0 1 0 2Zm-3 2L10 17v-3.5l1-3Z" /></svg>
-                    <span class="title">Physiotherapists</span>
-                </NavLink>
-            }
         </li>
         <li class="nav-item px-3">
             @if (isPhisio)
@@ -25,6 +17,13 @@
                 <NavLink class="nav-link" href="patients" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span>
                     <span class="title">Patients</span>
+                </NavLink>
+            }
+            else if (!IsAssignedPsycho)
+            {
+                <NavLink class="nav-link" href="physiotherapists" Match="NavLinkMatch.All">
+                    <span class="oi oi-home" aria-hidden="true"></span>
+                    <span class="title">Physiotherapist</span>
                 </NavLink>
             }
             else
@@ -45,6 +44,7 @@
 </div>
 
 @code {
+    bool IsAssignedPsycho;
 
     private bool isPhisio
     {
@@ -54,10 +54,25 @@
         }
     }
 
+    protected override async Task OnInitializedAsync()
+    {
+        IsAssignedPsycho = await AssignedPsycho();
+    }
+
     private void SignOut()
     {
         SecureStorage.RemoveAll();
         Setting.UserBasicDetail = null;
         NavManager.NavigateTo("/login");
+    }
+
+    public async Task<bool> AssignedPsycho()
+    {
+        string userDetailsStr = await SecureStorage.GetAsync(nameof(Setting.UserBasicDetail));
+        var userBasicDetail = JsonConvert.DeserializeObject<UserBasicDetail>(userDetailsStr);
+        int userId = int.Parse(userBasicDetail.Id);
+        bool result = await PatientService.AssignedPsycho(userId);
+        return result;
+
     }
 }

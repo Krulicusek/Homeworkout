@@ -3,10 +3,13 @@
 @inject NavigationManager navigationManager
 @inject ICrudExerciseService CrudExerciseService;
 
+@if (isPhisio)
+{
 <Button OnClick="() =>Add()">Add exercise</Button>
 <br />
 <br />
 <br />
+}
 <GridRow Type="flex" Justify="center">
     
     <Space Size="@size" Direction="DirectionVHType.Vertical">
@@ -28,10 +31,12 @@
                                 </Space>
                             </Body>
                             <Extra>
+                                @if (isPhisio){
                                 <Button OnClick="() =>Edit(exercise.Id)">Edit </Button>
                                 <Button OnClick="() => ShowModal(exercise.Id)">
                                     Delete
                                 </Button>
+                                }
                                 <Modal Title="@("Delete")"
                                     Visible="@_visible"
                                     OnOk="HandleOk"
@@ -96,5 +101,13 @@
     private void Add()
     {
         navigationManager.NavigateTo($"/add");
+    }
+
+    private bool isPhisio
+    {
+        get
+        {
+            return Setting.UserBasicDetail != null ? Setting.UserBasicDetail.Role == "physiotherapist" : false;
+        }
     }
 }
