@@ -1,5 +1,4 @@
-﻿@page "/addSequence"
-@page "/addSequence/{Id:int}"
+﻿@page "/addSequence/{Id:int}"
 @using HomeWorkoutModels.Models;
 @inject ExerciseService ExerciseService
 @inject HomeworkSequenceService HomeworkSequenceService
@@ -40,11 +39,23 @@
                                         </Space>
                                     </SpaceItem>
                                     <SpaceItem>
-                                        <Button>Add to sequence</Button>
+                                        <Text>@LabelText(context)</Text>
                                     </SpaceItem>
                                 </Space>
                             </Body>
                         </Card>
+                    </ListItem>
+                </ChildContent>
+            </AntList>
+        </SpaceItem> 
+        <SpaceItem>
+            <Button OnClick="PostSequence">Post sequence</Button>
+        </SpaceItem>
+        <SpaceItem>
+            <AntList DataSource="choosenExerciseList">
+                <ChildContent>
+                    <ListItem>
+                        <Image Style = "width:50px" Src="@context.ImageSource"></Image>
                     </ListItem>
                 </ChildContent>
             </AntList>
@@ -57,30 +68,70 @@
 
 @code {
     [Parameter]
-    public int? Id { get; set; }
+    public int Id { get; set; }
     private string size = "large";
     private List<ExerciseModel> exerciseList;
+    private List<ExerciseModel> choosenExerciseList;
     Dictionary<ExerciseModel, HomeworkModel> exerciseDictionary = new Dictionary<ExerciseModel, HomeworkModel>();
     private HomeworkSequenceModel homeworkSequence;
     private bool showModal = false;
-
-    //static RenderFragment add = @<Button>Add</Button>;
-    //public RenderFragment[] actions = new[] { add };
+    private int placeInSequence = 0;
 
     protected override async Task OnInitializedAsync()
     {
+        choosenExerciseList = new List<ExerciseModel>();
+        homeworkSequence = new HomeworkSequenceModel();
+        homeworkSequence.UserId = Id;
+        homeworkSequence.HomeworkICollection = new List<HomeworkModel>();
         exerciseList = ExerciseService.GetExerciseModels();
         foreach (var exercise in exerciseList)
         {
             HomeworkModel homeworkModel = new HomeworkModel();
+            homeworkModel.ExerciseModelId = exercise.Id;            
             exerciseDictionary.Add(exercise, homeworkModel);
         }
     }
+
     void ItemClick(ExerciseModel exercise)
     {
-
+        if (!ExerciseAdded(exercise))
+        {
+            placeInSequence += 1;
+            HomeworkModel homeworkModel = exerciseDictionary[exercise];
+            homeworkModel.PlaceInSequence = placeInSequence;
+            homeworkSequence.HomeworkICollection.Add(homeworkModel);
+            choosenExerciseList.Add(exercise);
+        }
+        else
+        {
+            placeInSequence -= 1;
+            homeworkSequence.HomeworkICollection.Remove(exerciseDictionary[exercise]);
+            choosenExerciseList.Remove(exercise);
+        }       
     }
-    void Add()
+
+    bool ExerciseAdded(ExerciseModel exercise)
+    {
+        if (homeworkSequence.HomeworkICollection != null && homeworkSequence.HomeworkICollection.Contains(exerciseDictionary[exercise]))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    string LabelText(ExerciseModel exercise)
+    {
+        if (ExerciseAdded(exercise))
+        {
+            return "Click card to remove exercise from sequence";
+        }
+        else
+        {
+            return "Click card to add exercose to sequence";
+        }
+    }
+
+    void PostSequence()
     {
         HomeworkSequenceService.AddHomeworkSequence(homeworkSequence);
     }

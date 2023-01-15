@@ -14,7 +14,7 @@
                 </Text>
             </SpaceItem>
  
-            <AntList Style="width:300px" DataSource="@patientList" TItem="UserBasicDetail" Split=true>
+            <AntList Style="width:200px" DataSource="@patientList" TItem="UserBasicDetail" Split=true>
                 <ListItem OnClick="()=>ItemClick(context.Id)">
                     <ListItemMeta AvatarTemplate="avatar" Description=@context.Email>
                         <TitleTemplate>
@@ -31,7 +31,7 @@
                     No patients associated with this user
                 </Text>
             </SpaceItem>
-        }
+        }     
     </Space>
 </GridRow>
 

@@ -36,9 +36,8 @@ namespace HomeWorkoutBackend.Controllers
         [HttpGet("userId/{userId}", Name = "GetHomeworkSequenceByUserId")]
         public HomeworkSequenceModel GetHomeworkSequenceByUserId(int userId)
         {
-            return _context.HomeworkSequenceModel
-                .Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
-                .FirstOrDefault(x => x.UserId == userId);
+            return _context.HomeworkSequenceModel.Include(x => x.HomeworkICollection.OrderBy(x => x.PlaceInSequence))
+                .OrderBy(x => x.Id).LastOrDefault(x => x.UserId == userId);
         }
 
         [HttpPost(Name = "PostHomeworkSequence")]
