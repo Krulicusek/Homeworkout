@@ -16,10 +16,8 @@
             @foreach (var physiotherapist in physiotherapistsList)
             {         
                 <SpaceItem>
-                    <Card Style="width:300px">
-                        <Body>
-                            <CardMeta Title="@($"{physiotherapist.Name} {physiotherapist.Surname}")">
-                            </CardMeta>
+                    <Card Style="width:300px" Title="@($"{physiotherapist.Name} {physiotherapist.Surname}")">
+                        <Extra>
                             <Button OnClick="() =>ShowModal(physiotherapist.Id)">Choose</Button>
                             <Modal Title="@("Choose")"
                            Visible="@_visible"
@@ -28,7 +26,7 @@
                            ConfirmLoading="@_confirmLoading">
                                 <p>@_modalText</p>
                             </Modal>
-                        </Body>
+                        </Extra>
                     </Card>
                 </SpaceItem>
             }    
