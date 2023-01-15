@@ -75,7 +75,7 @@
         await PatientService.ChoosePhysiotherapist(userBasicDetail.Id, idToPick);
         _visible = false;
         _confirmLoading = false;
-        navigationManager.NavigateTo("/exercise");
+        navigationManager.NavigateTo("/exercise", forceLoad: true);
     }
 
 
