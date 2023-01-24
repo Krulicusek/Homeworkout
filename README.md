@@ -1,6 +1,9 @@
-# Homeworkout
+# Homeworkout - __cross-platform workout app__
 __Aplikacja do treningu.__ <br/> 
 ***
+## Project documentation:
 
-More info [here](../../wiki)
+[Github Wiki](../../wiki)
+
+***
 
