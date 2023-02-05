@@ -13,6 +13,11 @@
                     @($"Sequence estimated time: {homeworkSequenceModel.EstimatedTimeInMinutes} minutes")
                 </Text>
             </SpaceItem>
+            <SpaceItem>
+                <Text Strong>
+                    <a href='@string.Format("http://127.0.0.1:5000/{0}",userBasicDetail.Id)'>Homework Statistics</a>
+                </Text>
+            </SpaceItem>
             @foreach (var exercise in exerciseList)
             {
                 <GridCol>
